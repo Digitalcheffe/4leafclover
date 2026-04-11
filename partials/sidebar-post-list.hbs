@@ -1,0 +1,32 @@
+<ul class="sidebar-post-list">
+  {{#foreach posts}}
+    <li class="sidebar-post">
+      <a class="sidebar-post-link" href="{{url}}" aria-label="{{title}}"></a>
+
+      <div class="sidebar-post-title">{{title}}</div>
+
+      <p class="sidebar-excerpt">{{excerpt words="24"}} <span class="sidebar-readmore">Read more</span></p>
+
+      <div class="sidebar-meta">
+        <span class="sidebar-author">{{primary_author.name}}</span>
+        ·
+        <time datetime="{{date format="YYYY-MM-DD"}}">
+          {{date format="MMM D, YYYY"}}
+        </time>
+        · {{reading_time}}
+      </div>
+
+      {{#if tags}}
+        <div class="sidebar-tags">
+          {{#foreach tags}}
+            <a href="{{url}}">{{name}}</a>
+          {{/foreach}}
+        </div>
+      {{/if}}
+    </li>
+
+    {{#unless @last}}
+      <hr class="sidebar-divider">
+    {{/unless}}
+  {{/foreach}}
+</ul>

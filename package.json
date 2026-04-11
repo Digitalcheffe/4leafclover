@@ -1,0 +1,108 @@
+{
+    "name": "4leafclover",
+    "description": "4leafclover - Bold high-contrast Ghost theme with horizontal feed, sidebar, and deep customization.",
+    "version": "1.0.12",
+    "private": true,
+    "engines": {
+        "ghost": ">=6.0.0"
+    },
+    "scripts": {
+        "dev": "tailwindcss -i ./src/main.css -o ./assets/built/main.css --watch",
+        "build": "tailwindcss -i ./src/main.css -o ./assets/built/main.css --minify",
+        "gscan": "gscan ."
+    },
+    "devDependencies": {
+        "gscan": "^4.0.0",
+        "tailwindcss": "^3.4.0",
+        "autoprefixer": "^10.4.0",
+        "postcss": "^8.4.0"
+    },
+    "author": {
+        "name": "FreshStart Theme",
+        "email": "themes@example.com"
+    },
+    "config": {
+        "custom": {
+            "background_color": {
+                "type": "color",
+                "default": "#0B0F14",
+                "description": "Page background color"
+            },
+            "surface_color": {
+                "type": "color",
+                "default": "#121823",
+                "description": "Surface/card background color"
+            },
+            "sticky_header": {
+                "type": "boolean",
+                "default": false,
+                "description": "Keep the site header fixed to the top while scrolling"
+            },
+            "sidebar_sticky": {
+                "type": "boolean",
+                "default": false,
+                "description": "Make the sidebar stick while scrolling (desktop)"
+            },
+            "social_links_extra": {
+                "type": "text",
+                "default": "",
+                "description": "Comma-separated list of Platform:URL pairs (e.g. GitHub:https://github.com/x, LinkedIn:https://linkedin.com/in/x)"
+            },
+            "cta_text": {
+                "type": "text",
+                "default": "Join free for updates",
+                "description": "Signup CTA text used in the sidebar"
+            },
+            "cta_subtext": {
+                "type": "text",
+                "default": "No spam. Just the good stuff.",
+                "description": "Signup CTA subtext used in the sidebar"
+            },
+            "contact_webhook_url": {
+                "type": "text",
+                "default": "",
+                "title": "Contact form webhook URL",
+                "description": "Optional. If set, the contact form will POST to this webhook (e.g., n8n). Leave blank to use the form action endpoint."
+            },
+            "contact_success_message": {
+                "type": "text",
+                "default": "Thanks \u2014 your message has been sent!",
+                "title": "Contact success message",
+                "description": "Message shown after successful submission."
+            },
+            "contact_error_message": {
+                "type": "text",
+                "default": "Sorry \u2014 something went wrong. Please try again later.",
+                "title": "Contact error message",
+                "description": "Message shown if the webhook returns an error."
+            },
+            "home_hero_logo": {
+                "type": "image",
+                "default": "",
+                "group": "homepage",
+                "title": "Home hero overlay logo",
+                "description": "Centered logo overlay on the home page publication cover image."
+            },
+            "show_home_intro": {
+                "type": "boolean",
+                "default": true,
+                "group": "homepage",
+                "description": "Show the homepage intro content (from the page slug above)"
+            },
+            "page_bridge_text": {
+                "type": "text",
+                "default": "Field:Notes",
+                "group": "homepage",
+                "title": "Page bridge text",
+                "description": "Text shown in the bridge between the hero and the page feed. Format: Left:Right (example: Field:Notes)."
+            },
+            "footer_bridge_text": {
+                "type": "text",
+                "default": "Stay Curious:Stay Useful",
+                "group": "footer",
+                "title": "Footer bridge text",
+                "description": "Text shown in the bridge above the footer. Format: Left:Right (example: Stay Curious:Stay Useful)."
+            }
+        }
+    }
+}

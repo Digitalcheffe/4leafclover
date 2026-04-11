@@ -1,0 +1,98 @@
+{{!< default}}
+
+<main class="fs-main">
+  
+<section class="fs-home-hero" {{#if @site.cover_image}}style="--fs-hero-bg:url('{{@site.cover_image}}')"{{/if}}>
+  <div class="fs-home-hero__bg" aria-hidden="true"></div>
+
+  {{#if @custom.home_hero_logo}}
+    <div class="fs-home-hero__logo" aria-hidden="true">
+      <img src="{{@custom.home_hero_logo}}" alt="{{@site.title}} logo">
+    </div>
+  {{/if}}
+
+
+  <div class="fs-home-hero__inner gh-canvas">
+    
+
+  </div>
+</section>
+
+<div class="fs-section-bridge fs-section-bridge--after-hero">
+  <div class="fs-section-bridge__inner" data-bridge-split="{{@custom.page_bridge_text}}">
+    <span class="fs-bridge-line"></span>
+    <span class="fs-bridge-word js-bridge-left">Field</span>
+    <span class="fs-bridge-dot"></span>
+    <span class="fs-bridge-word js-bridge-right">Notes</span>
+    <span class="fs-bridge-line"></span>
+  </div>
+</div>
+
+
+<div class="fs-featured-rail-shell">
+  <div class="fs-featured-rail">
+    <div class="fs-featured-rail__track">
+        {{#get "posts" filter="featured:true" limit="4" include="tags,authors"}}
+          {{#foreach posts}}
+            <article class="fs-rail-card">
+              <a class="fs-rail-card__hit" href="{{url}}" aria-label="{{title}}"></a>
+
+              {{#if feature_image}}
+                <div class="fs-rail-card__image">
+                  <img src="{{img_url feature_image size="m"}}" alt="{{title}}">
+                </div>
+              {{/if}}
+
+              <h3 class="fs-rail-card__title">{{title}}</h3>
+              <p class="fs-rail-card__excerpt">{{excerpt words="16"}}</p>
+
+              <div class="meta" aria-label="Post metadata">
+  <span class="meta-item">{{date format="MMM D, YYYY"}}</span>  <span class="meta-item">{{reading_time}}</span>
+</div>
+
+              {{#if tags}}
+                <div class="fs-tagline fs-tagline-bottom" aria-label="Post tags">
+  {{#foreach tags limit="2"}}
+    <a class="fs-pill" href="{{url}}">{{name}}</a>
+  {{/foreach}}
+</div>
+              {{/if}}
+            </article>
+          {{/foreach}}
+        {{/get}}
+    </div>
+  </div>
+</div>
+
+{{#if @custom.show_home_intro}}
+    {{> "home-intro"}}
+  {{/if}}
+
+<div class="fs-section-bridge fs-section-bridge--between">
+  <div class="fs-section-bridge__inner">
+
+    <span class="fs-bridge-line"></span>
+    <span class="fs-bridge-dot"></span>
+    <span class="fs-bridge-line"></span>
+  </div>
+</div>
+
+
+  <div class="fs-grid" style="align-items:start; margin-top:2rem;">
+
+    <section>
+      <section class="fs-feed-horizontal">
+        {{#get "posts" filter="featured:false" limit="all" include="tags,authors"}}
+  {{#foreach posts}}
+    {{> "post-row"}}
+  {{/foreach}}
+{{/get}}
+      </section>
+    </section>
+
+    <aside {{#if @custom.sidebar_sticky}}style="position:sticky;top:5.5rem;align-self:start;"{{/if}}>
+      {{> "sidebar"}}
+    </aside>
+
+  </div>
+</main>

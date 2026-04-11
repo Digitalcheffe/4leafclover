@@ -1,0 +1,100 @@
+{{!-- Contact form --}}
+<form class="fs-contact-form" method="POST" action="https://formspree.io/f/YOUR_FORM_ID" data-webhook="{{@custom.contact_webhook_url}}" data-success="{{@custom.contact_success_message}}" data-error="{{@custom.contact_error_message}}">
+          <div class="fs-contact-grid">
+            <label class="fs-contact-field">
+              <span class="fs-contact-label">Name</span>
+              <input class="fs-contact-input" type="text" name="name" autocomplete="name" required>
+            </label>
+
+            <label class="fs-contact-field">
+              <span class="fs-contact-label">Email</span>
+              <input class="fs-contact-input" type="email" name="email" autocomplete="email" required>
+            </label>
+          </div>
+
+          <label class="fs-contact-field">
+            <span class="fs-contact-label">Subject</span>
+            <input class="fs-contact-input" type="text" name="subject" required>
+          </label>
+
+          <label class="fs-contact-field">
+            <span class="fs-contact-label">Message</span>
+            <textarea class="fs-contact-textarea" name="message" rows="6" required></textarea>
+          </label>
+
+          {{!-- Optional: anti-spam honeypot --}}
+          <input type="text" name="_gotcha" class="fs-contact-honey" tabindex="-1" autocomplete="off">
+
+          <button class="fs-btn fs-contact-submit" type="submit">Send message</button>
+
+          <div class="fs-contact-status" role="status" aria-live="polite"></div>
+
+
+        <script>
+          (function () {
+            var form = document.querySelector('.fs-contact-form');
+            if (!form) return;
+
+            var webhook = (form.getAttribute('data-webhook') || '').trim();
+            if (!webhook) return; // fall back to normal form POST
+
+            form.addEventListener('submit', async function (e) {
+              e.preventDefault();
+
+              var statusEl = form.querySelector('.fs-contact-status');
+              var btn = form.querySelector('.fs-contact-submit');
+
+              var successMsg = form.getAttribute('data-success') || 'Thanks — your message has been sent!';
+              var errorMsg = form.getAttribute('data-error') || 'Sorry — something went wrong. Please try again later.';
+
+              if (btn) {
+                btn.disabled = true;
+                btn.setAttribute('aria-busy', 'true');
+              }
+
+              if (statusEl) statusEl.textContent = 'Sending...';
+
+              var fd = new FormData(form);
+              var gotcha = (fd.get('_gotcha') || '').toString().trim();
+              if (gotcha) {
+                if (statusEl) statusEl.textContent = errorMsg;
+                if (btn) {
+                  btn.disabled = false;
+                  btn.removeAttribute('aria-busy');
+                }
+                return;
+              }
+
+              var payload = {
+                name: (fd.get('name') || '').toString().trim(),
+                email: (fd.get('email') || '').toString().trim(),
+                subject: (fd.get('subject') || '').toString().trim(),
+                message: (fd.get('message') || '').toString().trim(),
+                pageUrl: window.location.href,
+                userAgent: navigator.userAgent,
+                ts: new Date().toISOString()
+              };
+
+              try {
+                var res = await fetch(webhook, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(payload)
+                });
+
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+
+                form.reset();
+                if (statusEl) statusEl.textContent = successMsg;
+              } catch (err) {
+                if (statusEl) statusEl.textContent = errorMsg;
+              } finally {
+                if (btn) {
+                  btn.disabled = false;
+                  btn.removeAttribute('aria-busy');
+                }
+              }
+            });
+          })();
+        </script>
+        </form>

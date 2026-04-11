@@ -1,0 +1,18 @@
+<article class="fs-card fs-postcard" style="padding:1.25rem;">
+  <a class="home-post-link" href="{{url}}" aria-label="{{title}}"></a>
+
+  <div class="fs-postcard-body">
+    <h2 class="fs-postcard-title">{{title}}</h2>
+    <p class="fs-postcard-excerpt">{{excerpt words="20"}}</p>
+  </div>
+
+  <div class="meta" aria-label="Post metadata">
+    <span class="meta-item">{{date format="MMM D, YYYY"}}</span>
+    <span class="meta-item">{{primary_author.name}}</span>
+    {{#if primary_tag}}
+      <span class="meta-item"><a href="{{primary_tag.url}}">{{primary_tag.name}}</a></span>
+    {{/if}}
+    <span class="meta-item">{{reading_time}}</span>
+    <span class="meta-item"><a href="{{url}}">Read →</a></span>
+  </div>
+</article>

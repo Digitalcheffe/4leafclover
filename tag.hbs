@@ -1,0 +1,35 @@
+{{!< default}}
+
+<main class="fs-main">
+  <div class="fs-grid" style="align-items:start;">
+
+    <article class="fs-content-card">
+      <div class="fs-content-wrap">
+        <header class="fs-post-header">
+          <nav class="fs-breadcrumbs" aria-label="Breadcrumb">
+            <a class="fs-crumb" href="{{@site.url}}">Home</a>
+            <span class="fs-crumb-sep">/</span>
+            <span class="fs-crumb-current">Tag: {{tag.name}}</span>
+          </nav>
+
+          <h1 style="margin:0;font-size:2rem;font-weight:950;letter-spacing:-0.03em;">Tag: {{tag.name}}</h1>
+          <div class="fs-feed-horizontal" style="margin-top:1.25rem;">
+          {{#foreach posts}}
+            {{> "post-row"}}
+          {{/foreach}}
+        </div>
+
+        <div style="margin-top:2.5rem;">
+          {{pagination}}
+        </div>
+      </div>
+    </article>
+
+    <aside class="fs-sidebar" {{#if @custom.sidebar_sticky}}style="position:sticky;top:5.5rem;align-self:start;"{{/if}}>
+      {{> "sidebar"}}
+    </aside>
+
+  </div>
+</main>
+
+        

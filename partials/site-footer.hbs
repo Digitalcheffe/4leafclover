@@ -1,0 +1,27 @@
+<footer class="fs-footer">
+  <div class="fs-footer-bridge">
+    <div class="fs-section-bridge__inner" data-bridge-split="{{@custom.footer_bridge_text}}">
+      <span class="fs-bridge-line"></span>
+      <span class="fs-bridge-word js-bridge-left">Stay Curious</span>
+      <span class="fs-bridge-dot"></span>
+      <span class="fs-bridge-word js-bridge-right">Stay Useful</span>
+      <span class="fs-bridge-line"></span>
+    </div>
+  </div>
+
+  {{#if @site.secondary_navigation}}
+    <nav class="fs-footer-nav fs-footer-nav--center" aria-label="Footer">
+      {{navigation type="secondary"}}
+    </nav>
+  {{/if}}
+
+  <div class="fs-container fs-footer-bottom">
+    <div class="fs-footer-meta">
+      © {{date format="YYYY"}} {{@site.title}} · Made intentionally.
+    </div>
+
+    <div class="fs-footer-signature">
+      Crafted with Clover + curiosity.
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,87 @@
+{{!< default}}
+
+{{#post}}
+
+<main class="fs-main">
+<div class="fs-grid" style="align-items:start;">
+    <article class="fs-content-card">
+      <div class="fs-content-wrap">
+        <header class="fs-post-header">
+          <nav class="fs-breadcrumbs" aria-label="Breadcrumb">
+            <a class="fs-crumb" href="{{@site.url}}">Home</a>
+            <span class="fs-crumb-sep">/</span>
+            <span class="fs-crumb-current">{{title}}</span>
+          </nav>
+
+          <div class="fs-muted" style="margin-top:.5rem;font-weight:800;">{{date format="MMM D, YYYY"}}{{#if tags}} • {{tags separator=" • "}}{{/if}}</div>
+
+          <h1 style="margin:0;font-size:2rem;font-weight:950;letter-spacing:-0.03em;">{{title}}</h1>
+        </header>
+
+
+      {{#if feature_image}}
+      <figure class="fs-post-feature">
+        <img src="{{img_url feature_image size="l"}}" alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}">
+</figure>
+      {{#if feature_image_caption}}
+        <div class="fs-image-attrib">{{{feature_image_caption}}}</div>
+      {{/if}}
+      
+      {{!-- Bridge between feature image and post body (lines + dot only) --}}
+      <div class="fs-section-bridge fs-section-bridge--post" aria-hidden="true">
+        <div class="fs-section-bridge__inner">
+          <span class="fs-bridge-line"></span>
+          <span class="fs-bridge-dot"></span>
+          <span class="fs-bridge-line"></span>
+        </div>
+      </div>
+      {{/if}}
+
+      <section class="gh-content" style="margin-top:1.5rem;">
+        {{content}}
+      </section>
+    </div>
+
+<section class="fs-author-card" aria-label="About the author">
+  {{#primary_author}}
+    <div class="fs-author-card__inner" aria-label="About author {{name}}">
+
+      {{!-- Whole card link (social icons sit above this layer and remain clickable) --}}
+      <a class="fs-author-card__overlay-link" href="{{url}}" aria-label="View author {{name}}"></a>
+
+      {{#if profile_image}}
+        <div class="fs-author-card__photo fs-author-card__pe-none">
+          <img src="{{img_url profile_image size="s"}}" alt="{{name}}">
+        </div>
+      {{/if}}
+
+      <div class="fs-author-card__body fs-author-card__pe-none">
+        <div class="fs-author-card__eyebrow">Author</div>
+        <h3 class="fs-author-card__name">{{name}}</h3>
+        {{#if bio}}
+          <p class="fs-author-card__bio">{{bio}}</p>
+        {{/if}}
+      </div>
+
+      {{!-- Social icons (only shows populated profiles) --}}
+      <div class="fs-author-card__socials">
+        {{> "author-socials"}}
+      </div>
+
+      {{#if cover_image}}
+        <div class="fs-author-card__cover" aria-hidden="true" style="background-image:url('{{img_url cover_image size="m"}}')"></div>
+      {{/if}}
+    </div>
+  {{/primary_author}}
+</section>
+
+
+</article>
+
+    <aside class="fs-sidebar" {{#if @custom.sidebar_sticky}}style="position:sticky;top:5.5rem;align-self:start;"{{/if}}>
+      {{> "sidebar"}}
+    </aside>
+  </div>
+</main>
+
+{{/post}}

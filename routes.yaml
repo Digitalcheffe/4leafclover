@@ -1,0 +1,10 @@
+collections:
+  /:
+    permalink: /{slug}/
+    template: index
+    per_page: 10
+    
+
+taxonomies:
+  tag: /tag/{slug}/
+  author: /author/{slug}/

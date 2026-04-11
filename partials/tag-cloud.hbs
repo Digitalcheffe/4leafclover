@@ -1,0 +1,9 @@
+{{#get "tags" limit="all" include="count.posts" order="count.posts desc"}}
+  <div style="display:flex;flex-wrap:wrap;gap:.5rem;">
+    {{#foreach tags}}
+      <a class="fs-pill" href="{{url}}">
+        {{name}} <span class="fs-muted" style="font-weight:900;">({{count.posts}})</span>
+      </a>
+    {{/foreach}}
+  </div>
+{{/get}}
