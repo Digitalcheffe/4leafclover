@@ -1,0 +1,30 @@
+<article class="fs-postrow">
+  <div class="fs-postrow-inner">
+    <a class="fs-row-hit" href="{{url}}" aria-label="Read {{title}}"></a>
+
+    {{#if feature_image}}
+      <a class="thumb thumb-link" href="{{url}}" aria-label="{{title}}">
+        <img src="{{img_url feature_image size="m"}}" alt="{{title}}">
+      </a>
+    {{/if}}
+
+    <div class="fs-row-content">
+      <h2 class="fs-row-title">{{title}}</h2>
+      <p class="fs-excerpt">{{excerpt}}</p>
+
+      
+        <div class="meta" aria-label="Post metadata">
+          <span class="meta-item">{{date format="MMM D, YYYY"}}</span>          <span class="meta-item">{{reading_time}}</span>
+        </div>
+      
+
+      {{#if tags}}
+        <div class="fs-tagline fs-tagline-bottom" aria-label="Post tags">
+          {{#foreach tags limit="3"}}
+            <a class="fs-pill" href="{{url}}">{{name}}</a>
+          {{/foreach}}
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</article>

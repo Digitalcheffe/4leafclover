@@ -1,0 +1,15 @@
+{{! Homepage intro content pulled from the Page with slug 'home' }}
+<section class="fs-home-intro">
+  {{#get "pages" filter="slug:home" limit="1"}}
+    {{#foreach pages}}
+      {{#if feature_image}}
+        <figure class="fs-home-intro-figure">
+          <img src="{{img_url feature_image size="xl"}}" alt="{{title}}">
+        </figure>
+      {{/if}}
+      <div class="gh-content fs-home-intro-content">
+        {{content}}
+      </div>
+    {{/foreach}}
+  {{/get}}
+</section>

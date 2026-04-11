@@ -1,0 +1,45 @@
+{{!< default}}
+
+{{#post}}
+
+<main class="fs-main">
+<div class="fs-grid" style="align-items:start;">
+    <article class="fs-content-card">
+      <div class="fs-content-wrap">
+        <header class="fs-post-header">
+          <nav class="fs-breadcrumbs" aria-label="Breadcrumb">
+            <a class="fs-crumb" href="{{@site.url}}">Home</a>
+            <span class="fs-crumb-sep">/</span>
+            <span class="fs-crumb-current">{{title}}</span>
+          </nav>
+
+          <div class="fs-muted" style="margin-top:.5rem;font-weight:800;">{{date format="MMM D, YYYY"}}{{#if primary_tag}} • <a href="{{primary_tag.url}}">{{primary_tag.name}}</a>{{/if}}</div>
+          {{#if @page.show_title_and_feature_image}}
+          
+          <h1 style="margin:0;font-size:2rem;font-weight:950;letter-spacing:-0.03em;">{{title}}</h1>
+          {{/if}}
+        </header>
+
+      {{#if @page.show_title_and_feature_image}}
+      {{#if feature_image}}
+      <figure class="fs-post-feature">
+        <img src="{{img_url feature_image size="l"}}" alt="{{title}}">
+      </figure>
+      {{/if}}
+      {{/if}}
+<section class="gh-content" style="margin-top:1.5rem;">
+        {{#match slug "contact"}}
+          {{> "contact-form"}}
+        {{/match}}
+        {{content}}
+      </section>
+      </div>
+    </article>
+
+    <aside class="fs-sidebar" {{#if @custom.sidebar_sticky}}style="position:sticky;top:5.5rem;align-self:start;"{{/if}}>
+      {{> "sidebar"}}
+    </aside>
+  </div>
+</main>
+
+{{/post}}

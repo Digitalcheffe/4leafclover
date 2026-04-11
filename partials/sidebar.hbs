@@ -1,0 +1,151 @@
+<aside class="site-sidebar {{#if @custom.sidebar_sticky}}is-sticky{{/if}}">
+
+  <section class="sidebar-section fs-card">
+    <h3 class="sidebar-title">Follow</h3>
+
+    <div class="sidebar-social" data-extra-social="{{@custom.social_links_extra}}">
+      <a class="social-icon" href="{{@site.url}}/rss/" aria-label="RSS">
+        <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+          <path d="M6.2 17.8a1.8 1.8 0 1 1 0 3.6 1.8 1.8 0 0 1 0-3.6zM3 3.5v3.1c8 0 14.4 6.5 14.4 14.4h3.1C20.5 11.3 12.7 3.5 3 3.5zM3 9.7v3.1c4.6 0 8.2 3.7 8.2 8.2h3.1c0-6.3-5.1-11.3-11.3-11.3z"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <section class="sidebar-section fs-card">
+    <h3 class="sidebar-title">Categories</h3>
+    {{> tag-cloud}}
+  </section>
+
+  
+  {{!-- Related / Recent posts: show on posts and pages, but never on Home page (slug 'home') --}}
+  {{#match slug "!=" "home"}}
+
+    {{#is "post"}}
+      {{#if primary_tag}}
+
+        {{!-- Try related posts first --}}
+        {{#get "posts" include="authors" limit="5" filter="tag:{{primary_tag.slug}}+id:-{{id}}" order="published_at desc"}}
+          {{#foreach posts}}
+            {{#if @first}}
+            <section class="sidebar-section sidebar-related fs-card">
+              <h3 class="sidebar-title">More on <span class="sidebar-title-tag">Tag: {{../../primary_tag.name}}</span></h3>
+              <ul class="sidebar-related-list">
+            {{/if}}
+
+                <li class="sidebar-related-item">
+                  <a class="sidebar-related-link" href="{{url}}">{{title}}</a>
+                  <div class="sidebar-related-meta"><time datetime="{{date format="YYYY-MM-DD"}}">{{date format="MMM D, YYYY"}}</time>
+                    <span class="sidebar-related-sep">•</span>
+                    <span class="sidebar-related-read">{{reading_time}}</span>
+                  </div>
+                </li>
+                <hr class="sidebar-related-hr">
+
+            {{#if @last}}
+              </ul>
+            </section>
+            {{/if}}
+          {{else}}
+            {{!-- Fallback: no related posts, show latest 5 with a different title --}}
+            <section class="sidebar-section sidebar-related fs-card">
+              <h3 class="sidebar-title">Latest posts</h3>
+              <ul class="sidebar-related-list">
+                {{#get "posts" include="authors" limit="5" order="published_at desc"}}
+                  {{#foreach posts}}
+                    <li class="sidebar-related-item">
+                      <a class="sidebar-related-link" href="{{url}}">{{title}}</a>
+                      <div class="sidebar-related-meta"><time datetime="{{date format="YYYY-MM-DD"}}">{{date format="MMM D, YYYY"}}</time>
+                    <span class="sidebar-related-sep">•</span>
+                    <span class="sidebar-related-read">{{reading_time}}</span>
+                      </div>
+                    </li>
+                    <hr class="sidebar-related-hr">
+                  {{/foreach}}
+                {{/get}}
+              </ul>
+            </section>
+          {{/foreach}}
+        {{/get}}
+
+      {{else}}
+        <section class="sidebar-section sidebar-related fs-card">
+          <h3 class="sidebar-title">Latest posts</h3>
+          <ul class="sidebar-related-list">
+            {{#get "posts" include="authors" limit="5" order="published_at desc"}}
+              {{#foreach posts}}
+                <li class="sidebar-related-item">
+                  <a class="sidebar-related-link" href="{{url}}">{{title}}</a>
+                  <div class="sidebar-related-meta"><time datetime="{{date format="YYYY-MM-DD"}}">{{date format="MMM D, YYYY"}}</time>
+                    <span class="sidebar-related-sep">•</span>
+                    <span class="sidebar-related-read">{{reading_time}}</span>
+                  </div>
+                </li>
+                <hr class="sidebar-related-hr">
+              {{/foreach}}
+            {{/get}}
+          </ul>
+        </section>
+      {{/if}}
+    {{/is}}
+
+    
+    {{#is "tag"}}
+      <section class="sidebar-section sidebar-related fs-card">
+        <h3 class="sidebar-title">Latest posts</h3>
+        <ul class="sidebar-related-list">
+          {{#get "posts" limit="5" order="published_at desc"}}
+            {{#foreach posts}}
+              <li class="sidebar-related-item">
+                <a class="sidebar-related-link" href="{{url}}">{{title}}</a>
+                <div class="sidebar-related-meta">
+                  <time datetime="{{date format="YYYY-MM-DD"}}">{{date format="MMM D, YYYY"}}</time>
+                  <span class="sidebar-related-sep">•</span>
+                  <span class="sidebar-related-read">{{reading_time}}</span>
+                </div>
+              </li>
+              <hr class="sidebar-related-hr">
+            {{/foreach}}
+          {{/get}}
+        </ul>
+      </section>
+    {{/is}}
+
+    {{#is "page"}}
+      <section class="sidebar-section sidebar-related fs-card">
+        <h3 class="sidebar-title">Latest posts</h3>
+        <ul class="sidebar-related-list">
+          {{#get "posts" include="authors" limit="5" order="published_at desc"}}
+            {{#foreach posts}}
+              <li class="sidebar-related-item">
+                <a class="sidebar-related-link" href="{{url}}">{{title}}</a>
+                <div class="sidebar-related-meta"><time datetime="{{date format="YYYY-MM-DD"}}">{{date format="MMM D, YYYY"}}</time>
+                  <span class="sidebar-related-sep">•</span>
+                  <span class="sidebar-related-read">{{reading_time}}</span>
+                </div>
+              </li>
+              <hr class="sidebar-related-hr">
+            {{/foreach}}
+          {{/get}}
+        </ul>
+      </section>
+    {{/is}}
+
+  {{/match}}
+{{#is "post,page"}}
+    {{#match slug "!=" "home"}}
+      {{#if primary_tag}}
+{{/if}}
+    {{/match}}
+  {{/is}}
+<section class="sidebar-section sidebar-cta fs-card">
+    <h3 class="sidebar-title">{{#if @custom.cta_text}}{{@custom.cta_text}}{{else}}Join free for updates{{/if}}</h3>
+    {{#if @custom.cta_subtext}}
+      <p class="sidebar-cta-subtext">{{@custom.cta_subtext}}</p>
+    {{else}}
+      <p class="sidebar-cta-subtext">No spam. Just the good stuff.</p>
+    {{/if}}
+    <a class="sidebar-cta-button" href="/#/portal/signup">Join free</a>
+  </section>
+
+</aside>
