@@ -1,7 +1,7 @@
 {
     "name": "4leafclover",
     "description": "4leafclover - Bold high-contrast Ghost theme with horizontal feed, sidebar, and deep customization.",
-    "version": "1.0.12",
+    "version": "1.2.0",
     "private": true,
     "engines": {
         "ghost": ">=6.0.0"
@@ -9,6 +9,7 @@
     "scripts": {
         "dev": "tailwindcss -i ./src/main.css -o ./assets/built/main.css --watch",
         "build": "tailwindcss -i ./src/main.css -o ./assets/built/main.css --minify",
+        "pack": "node scripts/pack.js",
         "gscan": "gscan ."
     },
     "devDependencies": {
@@ -18,8 +19,8 @@
         "postcss": "^8.4.0"
     },
     "author": {
-        "name": "FreshStart Theme",
-        "email": "themes@example.com"
+        "name": "Digitalcheffe",
+        "url": "https://painfully-useful.com"
     },
     "config": {
         "custom": {
