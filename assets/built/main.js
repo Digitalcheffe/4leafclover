@@ -1,5 +1,5 @@
 (function () {
-  const key = "freshstart_theme";
+  const key = "4leafclover_theme";
   const root = document.documentElement;
   const btn = document.getElementById("themeToggle");
 
