@@ -82,12 +82,15 @@
 
     <section>
       <section class="fs-feed-horizontal">
-        {{#get "posts" filter="featured:false" limit="all" include="tags,authors"}}
+        {{#get "posts" filter="featured:false" limit="10" include="tags,authors"}}
   {{#foreach posts}}
     {{> "post-row"}}
   {{/foreach}}
 {{/get}}
       </section>
+      <div class="fs-pagination">
+        {{pagination}}
+      </div>
     </section>
 
     <aside{{#if @custom.sidebar_sticky}} class="is-sticky"{{/if}}>

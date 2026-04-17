@@ -1078,6 +1078,34 @@ body.home-template .fs-featured-rail-shell {
   margin-top: 2.5rem;
 }
 
+.fs-pagination .pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: .875rem;
+  font-weight: 800;
+}
+
+.fs-pagination .pagination .page-number {
+  color: var(--subtext);
+}
+
+.fs-pagination .pagination a {
+  display: inline-block;
+  padding: .4rem 1rem;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  color: var(--accent);
+  text-decoration: none;
+  transition: background .15s, color .15s;
+}
+
+.fs-pagination .pagination a:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
 /* tag cloud */
 .fs-tag-cloud {
   display: flex;
