@@ -137,6 +137,129 @@
 })();
 
 
+// ---- Search overlay ----
+(function () {
+  var overlay = document.getElementById('fs-search-overlay');
+  if (!overlay) return;
+
+  var input   = document.getElementById('fs-search-input');
+  var results = document.getElementById('fs-search-results');
+  var closeBtn = overlay.querySelector('.fs-search-close');
+  var backdrop = overlay.querySelector('.fs-search-backdrop');
+  var trigger  = document.querySelector('[data-search-trigger]');
+
+  var apiKey = (overlay.getAttribute('data-api-key') || '').trim();
+  var apiUrl = (overlay.getAttribute('data-api-url') || '').replace(/\/$/, '');
+
+  var debounceTimer;
+  var lastQuery = '';
+
+  function openSearch() {
+    overlay.classList.add('is-open');
+    document.documentElement.classList.add('fs-lock');
+    if (input) setTimeout(function () { input.focus(); }, 50);
+  }
+
+  function closeSearch() {
+    overlay.classList.remove('is-open');
+    document.documentElement.classList.remove('fs-lock');
+    if (results) results.innerHTML = '';
+    if (input) input.value = '';
+    lastQuery = '';
+    if (trigger) trigger.focus();
+  }
+
+  trigger  && trigger.addEventListener('click', function (e) { e.preventDefault(); openSearch(); });
+  closeBtn && closeBtn.addEventListener('click', closeSearch);
+  backdrop && backdrop.addEventListener('click', closeSearch);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeSearch();
+  });
+
+  if (!apiKey || !apiUrl) return;
+
+  function renderResults(posts, pages, tags) {
+    if (!results) return;
+    results.innerHTML = '';
+
+    if (!posts.length && !pages.length && !tags.length) {
+      results.innerHTML = '<div class="fs-search-empty">No results found.</div>';
+      return;
+    }
+
+    function addSection(label, items) {
+      if (!items.length) return;
+      var heading = document.createElement('div');
+      heading.className = 'fs-search-section-label';
+      heading.textContent = label;
+      results.appendChild(heading);
+
+      items.forEach(function (item) {
+        var a = document.createElement('a');
+        a.className = 'fs-search-result';
+        a.href = item.url;
+        a.addEventListener('click', closeSearch);
+
+        var badge = document.createElement('div');
+        badge.className = 'fs-search-result__badge';
+        badge.textContent = label.slice(0, -1); // 'Posts' → 'Post'
+
+        var title = document.createElement('div');
+        title.className = 'fs-search-result__title';
+        title.textContent = item.title || item.name;
+
+        a.appendChild(badge);
+        a.appendChild(title);
+
+        var snippet = item.excerpt || item.description;
+        if (snippet) {
+          var excerpt = document.createElement('p');
+          excerpt.className = 'fs-search-result__excerpt';
+          excerpt.textContent = snippet;
+          a.appendChild(excerpt);
+        }
+
+        results.appendChild(a);
+      });
+    }
+
+    addSection('Posts', posts);
+    addSection('Pages', pages);
+    addSection('Tags', tags);
+  }
+
+  async function doSearch(q) {
+    if (q.length < 2) { if (results) results.innerHTML = ''; return; }
+    if (q === lastQuery) return;
+    lastQuery = q;
+
+    var base   = apiUrl + '/ghost/api/content/';
+    var common = 'key=' + encodeURIComponent(apiKey) + '&q=' + encodeURIComponent(q) + '&limit=5';
+
+    try {
+      var [postsRes, pagesRes, tagsRes] = await Promise.all([
+        fetch(base + 'posts/?' + common + '&fields=title,url,excerpt'),
+        fetch(base + 'pages/?' + common + '&fields=title,url,excerpt'),
+        fetch(base + 'tags/?'  + common + '&fields=name,url,description')
+      ]);
+
+      var posts = postsRes.ok ? (await postsRes.json()).posts || [] : [];
+      var pages = pagesRes.ok ? (await pagesRes.json()).pages || [] : [];
+      var tags  = tagsRes.ok  ? (await tagsRes.json()).tags  || [] : [];
+
+      if (input && input.value.trim() === q) renderResults(posts, pages, tags);
+    } catch (err) { /* silently fail */ }
+  }
+
+  input && input.addEventListener('input', function () {
+    var q = input.value.trim();
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function () { doSearch(q); }, 300);
+  });
+})();
+
+
 // ---- Contact form ----
 (function () {
   var form = document.querySelector('.fs-contact-form');
