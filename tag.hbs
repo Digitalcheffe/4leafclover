@@ -1,7 +1,7 @@
 {{!< default}}
 
 <main class="fs-main">
-  <div class="fs-grid" style="align-items:start;">
+  <div class="fs-grid">
 
     <article class="fs-content-card">
       <div class="fs-content-wrap">
@@ -12,20 +12,20 @@
             <span class="fs-crumb-current">Tag: {{tag.name}}</span>
           </nav>
 
-          <h1 style="margin:0;font-size:2rem;font-weight:950;letter-spacing:-0.03em;">Tag: {{tag.name}}</h1>
-          <div class="fs-feed-horizontal" style="margin-top:1.25rem;">
+          <h1 class="fs-post-title">Tag: {{tag.name}}</h1>
+          <div class="fs-feed-horizontal">
           {{#foreach posts}}
             {{> "post-row"}}
           {{/foreach}}
         </div>
 
-        <div style="margin-top:2.5rem;">
+        <div class="fs-pagination">
           {{pagination}}
         </div>
       </div>
     </article>
 
-    <aside class="fs-sidebar" {{#if @custom.sidebar_sticky}}style="position:sticky;top:5.5rem;align-self:start;"{{/if}}>
+    <aside class="fs-sidebar{{#if @custom.sidebar_sticky}} is-sticky{{/if}}">
       {{> "sidebar"}}
     </aside>
 
