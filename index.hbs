@@ -13,8 +13,7 @@
 
 
   <div class="fs-home-hero__inner gh-canvas">
-    
-
+    <h1 class="sr-only">{{@site.title}}</h1>
   </div>
 </section>
 
@@ -78,19 +77,22 @@
 </div>
 
 
-  <div class="fs-grid" style="align-items:start; margin-top:2rem;">
+  <div class="fs-grid" style="align-items:start;">
 
     <section>
       <section class="fs-feed-horizontal">
-        {{#get "posts" filter="featured:false" limit="all" include="tags,authors"}}
+        {{#get "posts" filter="featured:false" limit="10" include="tags,authors"}}
   {{#foreach posts}}
     {{> "post-row"}}
   {{/foreach}}
 {{/get}}
       </section>
+      <div class="fs-pagination">
+        {{pagination}}
+      </div>
     </section>
 
-    <aside {{#if @custom.sidebar_sticky}}style="position:sticky;top:5.5rem;align-self:start;"{{/if}}>
+    <aside{{#if @custom.sidebar_sticky}} class="is-sticky"{{/if}}>
       {{> "sidebar"}}
     </aside>
 

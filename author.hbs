@@ -1,7 +1,7 @@
 {{!< default}}
 
 <main class="fs-main">
-  <div class="fs-grid" style="align-items:start;">
+  <div class="fs-grid">
 
     <article class="fs-content-card">
       <div class="fs-content-wrap">
@@ -16,7 +16,7 @@
           </header>
 
           {{!-- Author card (matches post.hbs author card; larger avatar on author page) --}}
-<section class="fs-author-card fs-author-card--profile" aria-label="About the author" style="margin-top:1.25rem;">
+<section class="fs-author-card fs-author-card--profile" aria-label="About the author">
   <div class="fs-author-card__inner" aria-label="About author {{name}}">
 
     {{!-- Whole card link (social icons sit above this layer and remain clickable) --}}
@@ -69,7 +69,7 @@
       </div>
     </article>
 
-    <aside class="fs-sidebar" {{#if @custom.sidebar_sticky}}style="position:sticky;top:5.5rem;align-self:start;"{{/if}}>
+    <aside class="fs-sidebar{{#if @custom.sidebar_sticky}} is-sticky{{/if}}">
       {{> "sidebar"}}
     </aside>
 

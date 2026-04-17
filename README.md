@@ -12,15 +12,11 @@ See it running in production on my own site: **[painfully-useful.com](https://pa
 
 This theme is **free to use** — grab it, fork it, change it, ship it on your own Ghost site. No license fee, no attribution required.
 
-It isn't perfect. I built it because I needed something for my own site and didn't want to pay for a premium theme, so the rough edges reflect "good enough for me" rather than a polished commercial release. Expect to tweak CSS, swap placeholder values (like the Formspree form ID), and clean up anything that doesn't fit your site.
+It isn't perfect. I built it because I needed something for my own site and didn't want to pay for a premium theme, so the rough edges reflect "good enough for me" rather than a polished commercial release. Expect to tweak CSS and clean up anything that doesn't fit your site.
 
 ## Support
 
 Very light support offered — I'll do my best to answer issues as they come in. If this theme gets more traction I'll put more energy into it. And if I make changes or improvements for my own site, I'll push updates back to this repo.
-
-### Known incomplete: contact page
-
-The contact page is **not finished**. The form markup, styling, and a webhook hook are all in place (see `partials/contact-form.hbs` and the `contact_webhook_url` setting) so you can wire it up to n8n, Zapier, Make, Formspree, etc. — but the end-to-end flow is **not fully tested**, and Ghost itself is a bit awkward about contact forms (no native server-side handling, so you're on your own for where the submission actually goes). Expect to do some plumbing and testing on your side before relying on it in production.
 
 ## Requirements
 
@@ -54,6 +50,10 @@ The main accent color uses Ghost's built-in `@site.accent_color` (set under **Se
 | ---------------- | ------- | ------- | ------ |
 | `sticky_header`  | boolean | `false` | Pins the site header to the top while scrolling. |
 | `sidebar_sticky` | boolean | `false` | Sticks the sidebar in place on desktop while scrolling. |
+
+### Search
+
+The header search button uses Ghost's native `#/search` hash route, which triggers the Sodo Search overlay Ghost injects automatically on Ghost 6 sites. No extra setup needed — search is available to all visitors regardless of whether Members is enabled.
 
 ### Homepage
 
@@ -89,17 +89,88 @@ The contact form renders on any page whose slug is `contact`, or on any page usi
 
 ## Contact form
 
-The `contact-form` partial is automatically rendered on:
+The contact form renders on any page with slug `contact` (via `page.hbs`) or any page using the `page-contact.hbs` template.
 
-- any page whose slug is `contact` (via `page.hbs`)
-- any page using the `page-contact.hbs` custom template
+This theme doesn't use integrated form partners like Formspree or Netlify Forms. Instead, form submissions POST as a JSON payload to a webhook URL you control. The simplest approach is to point `contact_webhook_url` at a service that can receive a POST and do something with it — send an email, log to a spreadsheet, trigger a notification, etc.
 
-Behavior:
+### Payload
 
-- By default the form `POST`s to the `action` attribute (Formspree placeholder — replace `YOUR_FORM_ID` in `partials/contact-form.hbs` or point it elsewhere).
-- If `contact_webhook_url` is set in theme settings, submissions are sent as JSON to that URL instead (name, email, subject, message, pageUrl, userAgent, timestamp).
-- Includes a hidden honeypot field (`_gotcha`) for basic spam protection.
-- Displays the configurable success/error messages inline without a page reload when using the webhook path.
+Every submission sends:
+
+```json
+{
+  "name": "Jane Smith",
+  "email": "jane@example.com",
+  "subject": "Hello",
+  "message": "Your message here",
+  "website": "",
+  "_elapsed": 4823,
+  "pageUrl": "https://yoursite.com/contact",
+  "ts": "2025-01-01T12:00:00.000Z"
+}
+```
+
+### Spam signals
+
+Two bot-detection signals are included in every payload:
+
+- **`website`** — a hidden field humans never see. Bots fill it automatically. Non-empty means discard.
+- **`_elapsed`** — milliseconds between page load and submit. Under 3000ms means a bot submitted the form before a human could have read it.
+
+### Wiring it up with n8n
+
+1. Add a **Webhook** node. Copy the production URL into `contact_webhook_url` in Ghost Admin → Settings → Design → Customize.
+2. Add a **Code** node. Paste this:
+
+```javascript
+const b = $input.first().json.body;
+const trap = (b.website || '').trim();
+const elapsed = parseInt(b._elapsed || 0);
+return [{ json: { ...b, _status: (trap || elapsed < 3000) ? 'bot' : 'good' } }];
+```
+
+3. Add an **IF** node. Set the condition to: `{{ $json._status }}` **equals** `good`.
+4. Connect: **Webhook → Code → IF**. Wire the **true** branch to your action (Send Email, Slack, etc.). Leave the false branch empty — bots get no response.
+
+> Tune the `3000` threshold (ms) up or down to taste. 5000ms is more conservative if you want extra headroom.
+
+### Posting to Matrix
+
+After the IF node's true branch, add a **Code** node to build the Matrix message payload:
+
+```javascript
+const b = $input.first().json;
+
+const plain = `📬 New contact from ${b.name}\nSubject: ${b.subject}\nEmail: ${b.email}\n\n${b.message}`;
+
+const html = `
+<h3>📬 New Contact Form Submission</h3>
+<p>
+  <strong>From:</strong> ${b.name} — <a href="mailto:${b.email}">${b.email}</a><br>
+  <strong>Subject:</strong> ${b.subject}
+</p>
+<blockquote>${b.message.replace(/\n/g, '<br>')}</blockquote>
+<p><em>${b.pageUrl}</em></p>
+`.trim();
+
+return [{
+  json: {
+    msgtype: "m.text",
+    body: plain,
+    format: "org.matrix.custom.html",
+    formatted_body: html
+  }
+}];
+```
+
+Then add an **HTTP Request** node:
+
+- **Method:** `PUT`
+- **URL:** `https://YOUR_MATRIX_SERVER/_matrix/client/v3/rooms/YOUR_ROOM_ID/send/m.room.message/{{$now}}`
+- **Header:** `Authorization: Bearer YOUR_ACCESS_TOKEN`
+- **Body:** JSON → pass `{{ $json }}` from the Code node
+
+The `{{$now}}` timestamp in the URL serves as the transaction ID and prevents duplicate messages if n8n retries.
 
 ## Featured posts
 

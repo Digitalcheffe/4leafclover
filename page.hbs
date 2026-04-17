@@ -3,7 +3,7 @@
 {{#post}}
 
 <main class="fs-main">
-<div class="fs-grid" style="align-items:start;">
+<div class="fs-grid">
     <article class="fs-content-card">
       <div class="fs-content-wrap">
         <header class="fs-post-header">
@@ -13,10 +13,10 @@
             <span class="fs-crumb-current">{{title}}</span>
           </nav>
 
-          <div class="fs-muted" style="margin-top:.5rem;font-weight:800;">{{date format="MMM D, YYYY"}}{{#if primary_tag}} • <a href="{{primary_tag.url}}">{{primary_tag.name}}</a>{{/if}}</div>
+          <div class="fs-muted fs-post-meta-line">{{date format="MMM D, YYYY"}}{{#if primary_tag}} • <a href="{{primary_tag.url}}">{{primary_tag.name}}</a>{{/if}}</div>
           {{#if @page.show_title_and_feature_image}}
-          
-          <h1 style="margin:0;font-size:2rem;font-weight:950;letter-spacing:-0.03em;">{{title}}</h1>
+
+          <h1 class="fs-post-title">{{title}}</h1>
           {{/if}}
         </header>
 
@@ -27,7 +27,7 @@
       </figure>
       {{/if}}
       {{/if}}
-<section class="gh-content" style="margin-top:1.5rem;">
+<section class="gh-content">
         {{#match slug "contact"}}
           {{> "contact-form"}}
         {{/match}}
@@ -36,7 +36,7 @@
       </div>
     </article>
 
-    <aside class="fs-sidebar" {{#if @custom.sidebar_sticky}}style="position:sticky;top:5.5rem;align-self:start;"{{/if}}>
+    <aside class="fs-sidebar{{#if @custom.sidebar_sticky}} is-sticky{{/if}}">
       {{> "sidebar"}}
     </aside>
   </div>
