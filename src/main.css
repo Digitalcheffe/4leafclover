@@ -1091,6 +1091,10 @@ body.home-template .fs-featured-rail-shell {
   margin-right: 0;
 }
 
+#fs-feed {
+  scroll-margin-top: 5.5rem;
+}
+
 .fs-pagination {
   margin-top: 2.5rem;
 }
