@@ -926,7 +926,7 @@ body.home-template .fs-featured-rail-shell {
   right: 0;
   bottom: 1rem !important;
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(255,255,255,.26), transparent) !important;
+  background: linear-gradient(to right, transparent, color-mix(in srgb, var(--text) 26%, transparent), transparent) !important;
 }
 
 /* hide divider dot (::before kept as rule but invisible) */
@@ -1362,7 +1362,7 @@ aside.is-sticky {
 
 .sidebar-cta-subtext {
   margin: 0;
-  color: rgba(255,255,255,.72);
+  color: var(--subtext);
 }
 
 .sidebar-cta-button {
@@ -1889,68 +1889,82 @@ aside.is-sticky {
    16. 404 / error pages
    ============================================================ */
 .fs-404 {
-  position: relative;
   min-height: calc(100vh - 140px);
   display: grid;
   place-items: center;
   padding: 4rem 1.5rem;
-  border-radius: 1.25rem;
-  overflow: hidden;
-  background: rgba(255,255,255,.03);
-}
-
-.fs-404.has-cover {
-  background-image: var(--fs404-cover);
-  background-size: cover;
-  background-position: center;
-}
-
-.fs-404__overlay {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at top, rgba(0,0,0,.35), rgba(0,0,0,.75));
-  z-index: 0;
 }
 
 .fs-404__content {
-  position: relative;
-  z-index: 1;
-  max-width: 720px;
+  max-width: 480px;
   width: 100%;
-  padding: 2rem;
   text-align: center;
-  backdrop-filter: blur(10px);
+}
+
+/* 404 clover image */
+.fs-clover {
+  display: inline-block;
+  margin-bottom: 1.75rem;
+  animation: fs-clover-sway 4s ease-in-out infinite;
+  transform-origin: bottom center;
+  filter: drop-shadow(0 0 28px color-mix(in srgb, var(--pop) 50%, transparent)) brightness(1.4);
+}
+
+.fs-clover__img {
+  display: block;
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  opacity: .85;
+}
+
+@keyframes fs-clover-sway {
+  0%, 100% { transform: rotate(-3deg); }
+  50%       { transform: rotate(3deg); }
 }
 
 .fs-404__code {
-  font-size: clamp(3rem, 7vw, 5rem);
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
   line-height: 1;
-  font-weight: 800;
-  letter-spacing: .08em;
-  color: var(--pop);
-  margin-bottom: .75rem;
+  font-weight: 900;
+  letter-spacing: .14em;
+  color: var(--subtext);
+  margin-bottom: .6rem;
 }
 
-.fs-404__title    { margin: 0 0 .75rem 0; }
-.fs-404__subtitle { margin: 0 auto 1.5rem auto; max-width: 54ch; opacity: .9; }
-.fs-404__actions  { display: flex; justify-content: center; }
+.fs-404__title {
+  margin: 0 0 .75rem;
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+}
+
+.fs-404__subtitle {
+  margin: 0 auto 2rem;
+  max-width: 42ch;
+  color: var(--subtext);
+  line-height: 1.6;
+}
+
+.fs-404__actions { display: flex; justify-content: center; }
 
 .fs-404__btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: 44px;
-  padding: .7rem 1.1rem;
+  padding: .7rem 1.4rem;
   border-radius: .9rem;
   background: var(--pop);
-  border: 1px solid var(--pop);
+  border: none;
   color: #0b0f12;
   text-decoration: none;
-  font-weight: 700;
+  font-weight: 800;
+  font-size: .95rem;
+  transition: filter .15s;
 }
-.fs-404__btn:hover { filter: brightness(1.05); }
+.fs-404__btn:hover { filter: brightness(1.08); }
 
-.fs-error { /* fs-card provides the visual */ }
+.fs-error { padding: 3rem 1.5rem; text-align: center; }
 .fs-error__title    { margin: 0 0 .5rem; }
 .fs-error__subtitle { margin: 0; color: var(--subtext); }
 

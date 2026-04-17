@@ -1,29 +1,23 @@
 {{!< default}}
 
 <main class="site-main">
-  {{#is "404"}}
-    <section class="fs-404 {{#if @site.cover_image}}has-cover{{/if}}"
-      {{#if @site.cover_image}}style="--fs404-cover: url('{{@site.cover_image}}')"{{/if}}>
-      <div class="fs-404__overlay"></div>
+  <section class="fs-404">
+    <div class="fs-404__content">
 
-      <div class="fs-404__content fs-card">
-        <div class="fs-404__code">{{error.statusCode}}</div>
-        <h1 class="fs-404__title">Oops, looks like something went missing.</h1>
-        <p class="fs-404__subtitle">
-          We can’t find the page you were looking for on <strong>{{@site.title}}</strong>.
-        </p>
-        <div class="fs-404__actions">
-          <a class="fs-404__btn" href="{{@site.url}}">Back to {{@site.title}}</a>
-        </div>
+      <div class="fs-clover" aria-hidden="true">
+        <img class="fs-clover__img" src="{{asset "images/clover-404.png"}}" alt="">
       </div>
-    </section>
-  {{else}}
-    <section class="fs-error fs-card">
-      <h1 class="fs-error__title">{{error.statusCode}} — {{error.message}}</h1>
-      <p class="fs-error__subtitle">
-        Something went wrong while loading <strong>{{@site.title}}</strong>.
+
+      <div class="fs-404__code">{{error.statusCode}}</div>
+      <h1 class="fs-404__title">You found a 4-leaf clover.</h1>
+      <p class="fs-404__subtitle">
+        Too bad the page you're after is the missing leaf on <strong>{{@site.title}}</strong>.
       </p>
-      <a class="fs-404__btn" href="{{@site.url}}">Return home</a>
-    </section>
-  {{/is}}
+
+      <div class="fs-404__actions">
+        <a class="fs-404__btn" href="{{@site.url}}">Head back home</a>
+      </div>
+
+    </div>
+  </section>
 </main>
