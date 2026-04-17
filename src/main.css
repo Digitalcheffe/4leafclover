@@ -801,17 +801,17 @@ body.home-template .fs-featured-rail-shell {
 @media (max-width: 780px)  { .fs-featured-rail__track { --fs-rail-cols: 2; } }
 
 
-/* mobile: switch from horizontal scroll to wrapped 2-column grid */
+/* mobile: switch from horizontal scroll to single-column stack */
 @media (max-width: 600px) {
   .fs-featured-rail__track {
-    flex-wrap: wrap;
+    flex-direction: column;
     overflow-x: visible;
     scroll-snap-type: none;
     gap: 1rem;
     padding-bottom: 0;
   }
   .fs-featured-rail__track .fs-rail-card {
-    flex: 1 1 calc(50% - .5rem);
+    flex: 1 1 100%;
     min-width: 0;
   }
 }
