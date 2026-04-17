@@ -1168,7 +1168,6 @@ a:hover { text-decoration: underline; }
   padding: 2rem 0;
 }
 
-}
 .fs-featured-rail-shell{
   margin-top: 0;
   transform: none;
@@ -1177,10 +1176,7 @@ a:hover { text-decoration: underline; }
 .fs-featured-rail{
   margin: 0 auto;
   max-width: var(--max-width, 1200px);
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.10);
-  backdrop-filter: blur(10px);
-  padding: 1rem 1rem;
+  padding: 1rem 0;
 }
 
 .fs-featured-rail__head{
@@ -1210,13 +1206,12 @@ a:hover { text-decoration: underline; }
 
 .fs-rail-card{
   position: relative;
-  /* Flat card: let the site background show through */
+  display: flex;
+  flex-direction: column;
   border-radius: 0;
   border: none;
   scroll-snap-align: start;
   overflow: hidden;
-
-  /* Rail cards: flat (no bg/shadow/padding) */
   padding: 0;
   background: transparent;
   background-color: transparent;
@@ -1231,10 +1226,14 @@ a:hover { text-decoration: underline; }
   position: relative;
   z-index: 1;
   margin: 0;
-  font-size: 1.25rem; /* match home feed post rows */
+  font-size: 1.25rem;
   font-weight: 950;
   letter-spacing: -0.02em;
   line-height: 1.15;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .fs-rail-card__excerpt{
   position: relative;
