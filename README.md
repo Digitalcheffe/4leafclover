@@ -51,6 +51,10 @@ The main accent color uses Ghost's built-in `@site.accent_color` (set under **Se
 | `sticky_header`  | boolean | `false` | Pins the site header to the top while scrolling. |
 | `sidebar_sticky` | boolean | `false` | Sticks the sidebar in place on desktop while scrolling. |
 
+### Search
+
+The header search button uses Ghost's native `#/search` hash route, which triggers the Sodo Search overlay Ghost injects automatically on Ghost 6 sites. No extra setup needed — search is available to all visitors regardless of whether Members is enabled.
+
 ### Homepage
 
 | Setting             | Type    | Default       | Effect |
