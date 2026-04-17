@@ -2,85 +2,124 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ============================
-   FreshStart Color System
-   ============================ */
+/* ============================================================
+   4leafclover — main.css
+   Table of contents:
+     1.  CSS custom properties (tokens)
+     2.  Base reset
+     3.  Utility helpers
+     4.  Header
+     5.  Mobile drawer
+     6.  Layout (grid, main, content wrap)
+     7.  Home hero
+     8.  Featured rail
+     9.  Post feed (horizontal rows)
+    10.  Sidebar
+    11.  Post / page content
+    12.  Author card
+    13.  Section bridges
+    14.  Footer
+    15.  Contact form
+    16.  404 / error pages
+    17.  Ghost content (gh-content, kg-*, code blocks)
+    18.  Nav states
+   ============================================================ */
 
-/* Dark default */
-:root{
-  --fs-actions-width: calc(22rem - 30px); /* match header actions + sidebar */
-  --bg: #0B0F14;
+
+/* ============================================================
+   1. CSS custom properties (tokens)
+   ============================================================ */
+:root {
+  /* Layout */
+  --fs-shell-max: 72rem;
+  --fs-actions-width: calc(22rem - 30px);
+  --fs-sidebar-width: var(--fs-actions-width);
+  --fs-grid-gap: 1.75rem;
+
+  /* Dark theme (default) */
+  --bg:      #0B0F14;
   --surface: #121823;
-  --muted: #2A3442;
-  --text: #EAF0F6;
+  --muted:   #2A3442;
+  --text:    #EAF0F6;
   --subtext: #A9B4C0;
+  --accent:  #D9772E;
+  --accent2: #2FB6D6;
+  --pop:     #63E06B;
+  --shadow:  0 14px 40px rgba(0,0,0,.55);
 
-  --accent: #D9772E;   /* rust/copper */
-  --accent2: #2FB6D6;  /* teal */
-  --pop: #63E06B;      /* neon foliage */
-
-  --shadow: 0 14px 40px rgba(0,0,0,.55);
+  /* Accent-tinted borders */
+  --pu-card-border:       color-mix(in srgb, var(--accent) 22%, var(--surface) 78%);
+  --pu-card-border-hover: color-mix(in srgb, var(--accent) 35%, var(--surface) 65%);
+  --pu-radius: .9rem;
+  --pu-accent: var(--accent);
 }
 
-/* Light alt */
 html[data-theme="light"] {
-  --bg: #F6F7FA;
+  --bg:      #F6F7FA;
   --surface: #FFFFFF;
-  --muted: #E6ECF2;
-  --text: #0E1420;
+  --muted:   #E6ECF2;
+  --text:    #0E1420;
   --subtext: #4A586A;
-
-  --shadow: 0 14px 30px rgba(8,18,33,.12);
+  --shadow:  0 14px 30px rgba(8,18,33,.12);
 }
 
-/* ============================
-   Base styling (works even before Tailwind build)
-   ============================ */
-html, body { height: 100%; }
+
+/* ============================================================
+   2. Base reset
+   ============================================================ */
+html, body {
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  html, body { overflow-x: hidden; }
+}
+
 body {
   margin: 0;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+               "Apple Color Emoji", "Segoe UI Emoji";
   background: var(--bg);
   color: var(--text);
   line-height: 1.5;
 }
 
-/* ============================
-   Sidebar social icon buttons
-   ============================ */
-.fs-social {
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.04);
-  box-shadow: 0 8px 22px rgba(0,0,0,.35);
-  color: var(--text);
-  text-decoration: none;
+main.fs-main, .site-main {
+  flex: 1 0 auto;
 }
 
-.fs-social:hover {
-  border-color: rgba(255,255,255,.22);
-  background: rgba(255,255,255,.06);
-  transform: translateY(-1px);
+.site-footer, footer {
+  margin-top: auto;
 }
 
-/* Links */
 a { color: var(--accent2); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-/* Utility-ish helpers for Ghost content */
-.fs-container { max-width: 72rem; margin: 0 auto; padding: 0 1rem; }
+html.fs-lock,
+html.fs-lock body { overflow: hidden; }
+
+
+/* ============================================================
+   3. Utility helpers
+   ============================================================ */
+.fs-container {
+  max-width: var(--fs-shell-max);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
 .fs-card {
   background: var(--surface);
   border: 1px solid var(--muted);
   border-radius: 1rem;
-  box-shadow: var(--shadow);
+  box-shadow: none;
 }
+
 .fs-muted { color: var(--subtext); }
+
 .fs-pill {
   display: inline-flex;
   align-items: center;
@@ -94,266 +133,18 @@ a:hover { text-decoration: underline; }
   color: var(--text);
 }
 
-/* Header */
-.fs-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  border-bottom: 1px solid var(--muted);
-  background: color-mix(in srgb, var(--bg) 90%, transparent);
-  backdrop-filter: blur(10px);
-}
-.fs-header-inner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: .75rem 0;
-}
-.fs-nav a {
-  color: var(--subtext);
-  font-weight: 800;
-  font-size: .9rem;
-}
-.fs-nav a:hover { color: var(--text); text-decoration: none; }
-.fs-actions {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-}
-.fs-btn {
-  border-radius: .9rem;
-  padding: .55rem .85rem;
-  border: 1px solid var(--muted);
-  background: transparent;
-  color: var(--subtext);
-  font-weight: 800;
-  cursor: pointer;
-}
-.fs-btn:hover { color: var(--text); }
-.fs-btn-primary {
-  border: none;
-  background: var(--accent);
-  color: #000;
-  box-shadow: var(--shadow);
-}
-.fs-btn-primary:hover { opacity: .92; }
-
-/* Layout */
-.fs-main { padding: 2.25rem 0; }
-.fs-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-}
-@media (min-width: 1024px) {
-  .fs-grid { grid-template-columns: 2fr 1fr; }
-}
-
-/* Index cards */
-.fs-feed {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.25rem;
-}
-@media (min-width: 768px) {
-  .fs-feed { grid-template-columns: 1fr 1fr; }
-}
-.fs-postcard h2 {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 900;
-  letter-spacing: -0.02em;
-}
-.fs-postcard p { margin: .5rem 0 0; color: var(--subtext); }
-.fs-postcard .meta {
-  margin-top: 1rem;
-  display: flex;
-  justify-content: space-between;
-  color: var(--subtext);
-  font-size: .8rem;
-  font-weight: 800;
-}
-
-/* Ghost content ("prose-lite") */
-.gh-content h1,.gh-content h2,.gh-content h3 { letter-spacing: -0.02em; }
-.gh-content h2 { margin-top: 2.25rem; }
-.gh-content code { background: var(--muted); padding: .15rem .35rem; border-radius: .5rem; }
-.gh-content blockquote { border-left: 4px solid var(--accent); margin-left: 0; padding-left: 1rem; color: var(--subtext); }
-.gh-content img { max-width: 100%; border-radius: 1rem; border: 1px solid var(--muted); }
-/* ============================
-   Koenig editor width helpers
-   Required by gscan for modern Ghost themes
-   ============================ */
-.kg-width-wide {
-  width: 100%;
-  max-width: 1040px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.kg-width-full {
-  /*
-    Full-bleed blocks (images, galleries, etc.)
-    Some Android/Samsung tablet landscape widths can render 100vw slightly wider than
-    the visual viewport, causing ~8–15px horizontal bleed and clipped content.
-    Default to safe behavior and prefer dvw/svw when supported.
-  */
-  width: 100%;
-  max-width: 100%;
-  margin-left: 0;
-  margin-right: 0;
-}
-
-@supports (width: 100dvw){
-  .kg-width-full{
-    width: 100dvw;
-    max-width: 100dvw;
-    margin-left: calc(50% - 50dvw);
-    margin-right: calc(50% - 50dvw);
-  }
-}
-
-@supports (width: 100svw){
-  .kg-width-full{
-    width: 100svw;
-    max-width: 100svw;
-    margin-left: calc(50% - 50svw);
-    margin-right: calc(50% - 50svw);
-  }
-}
-/* Make wide/full images behave nicely */
-.kg-width-wide img,
-.kg-width-full img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* ============================
-   FreshStart navigation reset
-   Ghost navigation renders as UL/LI; remove bullets and lay out horizontally
-   ============================ */
-.fs-nav ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.fs-nav li {
-  margin: 0;
-  padding: 0;
-}
-.fs-nav a {
-  display: inline-flex;
-  align-items: center;
-}
-
-/* ============================
-   FreshStart horizontal feed cards (patched for no-image posts)
-   ============================ */
-.fs-feed-horizontal {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-/* The row itself stays as a block; the link does layout so the whole row is clickable */
-.fs-postrow {
-  padding: 0;
-  border-bottom: 1px solid var(--muted);
-  background: var(--surface);
-}
-.fs-postrow:first-child {
-  border-top-left-radius: 1rem;
-  border-top-right-radius: 1rem;
-}
-.fs-postrow:last-child {
-  border-bottom-left-radius: 1rem;
-  border-bottom-right-radius: 1rem;
-  border-bottom: none;
-}
-
-.fs-postrow-inner {
-  display: flex;
-  gap: 1rem;
-  padding: 1.25rem;
-  color: inherit;
+/* pill as a tag link gets accent treatment */
+a.fs-pill {
+  border-color: var(--accent);
+  color: var(--accent);
   text-decoration: none;
-  align-items: flex-start;
+}
+a.fs-pill:hover {
+  filter: brightness(1.1);
+  text-decoration: none;
 }
 
-.fs-postrow .thumb {
-  flex: 0 0 140px;
-  width: 140px;
-  height: 92px;
-  border-radius: .9rem;
-  border: 1px solid var(--muted);
-  overflow: hidden;
-  background: var(--bg);
-}
-.fs-postrow .thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.fs-postrow .fs-postrow h2 {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 950;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-}
-.fs-postrow p {
-  margin: .45rem 0 0;
-  color: var(--subtext);
-  font-weight: 700;
-  /* keeps long excerpts from turning into a skyscraper */
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.fs-postrow .meta {
-  margin-top: .75rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: .6rem;
-  align-items: center;
-  color: var(--subtext);
-  font-size: .8rem;
-  font-weight: 900;
-}
-.fs-postrow .meta a { color: var(--accent2); text-decoration: none; }
-.fs-postrow .meta a:hover { text-decoration: underline; }
-
-/* When there's no thumbnail, let the content span full width */
-.fs-postrow-link:not(:has(.thumb)) {
-  padding-left: 1.25rem;
-}
-
-/* Mobile: stack thumb above content if present */
-@media (max-width: 520px) {
-  .fs-postrow-inner {
-    flex-direction: column;
-    padding: 0; /* let the thumb go full-width like featured posts */
-  }
-  .fs-postrow .thumb {
-    width: 100%;
-    height: 160px;
-  }
-  .fs-row-content{
-    padding: 1.25rem;
-  }
-}
-
-/* ============================
-   FreshStart metadata separators (robust for missing tag)
-   ============================ */
+/* meta separators */
 .meta .meta-item {
   display: inline-flex;
   align-items: center;
@@ -365,1857 +156,214 @@ a:hover { text-decoration: underline; }
   font-weight: 900;
 }
 
-/* Let the page background come through on horizontal feed rows */
-.fs-postrow {
-  background: transparent !important;
+/* kg layout helpers — required by gscan */
+.kg-width-wide {
+  width: 100%;
+  max-width: 1040px;
+  margin-left: auto;
+  margin-right: auto;
 }
-.fs-postrow-inner {
-  border-radius: 1rem;
+.kg-width-full {
+  width: 100%;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
 }
-.fs-postrow-inner:hover {
-  background: color-mix(in srgb, var(--surface) 35%, transparent);
+@supports (width: 100dvw) {
+  .kg-width-full {
+    width: 100dvw;
+    max-width: 100dvw;
+    margin-left: calc(50% - 50dvw);
+    margin-right: calc(50% - 50dvw);
+  }
 }
-
-/* Horizontal row link styling */
-.thumb-link {
-  display: block;
-  text-decoration: none;
-  color: inherit;
+@supports (width: 100svw) {
+  .kg-width-full {
+    width: 100svw;
+    max-width: 100svw;
+    margin-left: calc(50% - 50svw);
+    margin-right: calc(50% - 50svw);
+  }
 }
-.content-link {
-  display: block;
-  color: inherit;
-  text-decoration: none;
-}
-.content-link:hover h2 {
-  text-decoration: underline;
-}
-
-/* ============================
-   4leafclover horizontal feed tag line
-   ============================ */
-.fs-tagline {
-  margin-top: .55rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: .5rem;
-}
-.title-link, .excerpt-link {
-  display: block;
-  color: inherit;
-  text-decoration: none;
-}
-.title-link:hover h2 {
-  text-decoration: underline;
-}
-.excerpt-link:hover p {
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 3px;
-}
-/* Ensure pills in feed match sidebar vibe */
-.fs-tagline .fs-pill {
-  font-size: .72rem;
-  padding: .4rem .7rem;
-}
-
-/* ============================
-   4leafclover homepage intro section
-   ============================ */
-.fs-home-intro {
-  margin-top: 1rem;
-}
-.fs-home-intro-figure {
-  margin: 0 0 1.25rem 0;
-}
-.fs-home-intro-figure img {
+.kg-width-wide img,
+.kg-width-full img {
   width: 100%;
   height: auto;
-  border-radius: 1.25rem;
-  border: 1px solid var(--muted);
-}
-.fs-home-intro-content {
-  margin-top: 0;
+  display: block;
 }
 
-/* ============================
-   4leafclover: disable hover "link" behavior on horizontal posts
-   ============================ */
-.fs-postrow-inner:hover {
-  background: transparent !important;
-}
-.title-link:hover h2,
-.excerpt-link:hover p {
-  text-decoration: none !important;
-}
-.title-link, .excerpt-link {
-  cursor: default;
-}
-/* Keep pills and explicit links clickable */
-.fs-tagline a,
-.meta a,
-.thumb-link {
-  cursor: pointer;
-}
-/* Bottom tag line spacing */
-.fs-tagline-bottom {
-  margin-top: .75rem;
+
+/* ============================================================
+   4. Header
+   ============================================================ */
+.fs-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid var(--muted);
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  backdrop-filter: blur(10px);
 }
 
-/* ============================
-   4leafclover: ensure horizontal excerpt never looks like a link
-   ============================ */
-.fs-postrow .excerpt-link p,
-.fs-postrow .excerpt-link:hover p,
-.fs-postrow .excerpt-link:focus p,
-.fs-postrow .excerpt-link:active p {
-  text-decoration: none !important;
-}
-
-/* ============================
-   4leafclover: horizontal excerpt is plain text (not a link)
-   ============================ */
-.fs-postrow .fs-excerpt {
-  margin: .45rem 0 0;
-  color: var(--subtext);
-  font-weight: 700;
-  cursor: default;
-  text-decoration: none;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* ============================
-   4leafclover: optional non-sticky header
-   ============================ */
 .fs-header-static {
   position: relative !important;
   top: auto !important;
 }
 
-/* ============================
-   4leafclover: tighten top spacing so content starts right under header
-   ============================ */
-.fs-main {
-  padding-top: 0 !important;
-}
-.fs-home-intro {
-  margin-top: 0 !important;
-}
-
-/* ============================
-   4leafclover: header navigation layout (Inline vs Under Title)
-   ============================ */
-/* Default (Inline): existing flex row layout is used. */
-
-/* Under Title: stack nav under the brand area */
-.fs-header:not(.fs-header-inline) .fs-header-inner {
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: .75rem 1rem;
-}
-
-.fs-header:not(.fs-header-inline) .fs-brand {
-  flex: 1 1 auto;
-}
-
-.fs-header:not(.fs-header-inline) .fs-nav {
-  order: 2;
-  flex: 1 1 100%;
-  margin-left: 0;
-}
-
-.fs-header:not(.fs-header-inline) .fs-header-actions {
-  order: 3;
-  margin-left: auto;
-}
-
-/* ============================
-   4leafclover: header nav layout logic
-   ============================ */
-.fs-nav-top { display: none; }
-.fs-nav-bottom { display: flex; gap: 1rem; flex-wrap: wrap; padding: 0 0 .75rem 0; }
-
-/* Inline mode: show top nav beside title, hide bottom nav */
-.fs-header.fs-header-inline .fs-nav-top { display: flex; gap: 1rem; align-items: center; }
-.fs-header.fs-header-inline .fs-nav-bottom { display: none; }
-
-/* Under Title mode: ensure top nav stays hidden */
-.fs-header:not(.fs-header-inline) .fs-nav-top { display: none; }
-.fs-header:not(.fs-header-inline) .fs-nav-bottom { display: flex; }
-
-/* Make Ghost nav UL horizontal */
-.fs-nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
-.fs-nav li { margin: 0; padding: 0; }
-
-/* ============================
-   4leafclover: small gap below header (homepage + pages)
-   ============================ */
-.fs-main { padding-top: .9rem !important; }
-.fs-home-intro { margin-top: .9rem !important; }
-
-/* ============================
-   4leafclover: make entire horizontal row clickable (stretched link)
-   ============================ */
-.fs-postrow-inner {
-  position: relative;
-}
-.fs-row-hit {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  text-decoration: none;
-}
-/* Keep real interactive elements above the hit area */
-.fs-postrow .thumb-link,
-.fs-postrow .fs-tagline a,
-.fs-postrow .meta a {
-  position: relative;
-  z-index: 2;
-}
-/* Ensure title/excerpt don't look like links */
-.fs-postrow .fs-row-title,
-.fs-postrow .fs-excerpt {
-  position: relative;
-  z-index: 2;
-}
-.fs-row-hit:hover { text-decoration: none; }
-
-/* ============================
-   4leafclover: post feature image containment (single source of truth)
-   - Constrain to reading width
-   - Prevent overflow outside the frame
-   ============================ */
-.fs-post-feature{
-  width: 100%;
-  margin: 1.25rem auto 1.75rem;
-  /* Use padding + background as the frame to avoid 1px border gaps from subpixel rounding */
-  padding: 1px;
-  background: var(--pu-card-border);
-  border-radius: 1.25rem;
-  overflow: hidden;
-}
-.fs-post-feature img{
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: calc(1.25rem - 1px);
-}
-
-/* ============================
-   4leafclover: header nav is always inline now
-   ============================ */
-.fs-nav { display: flex; align-items: center; }
-
-
-/* ============================
-   4leafclover: content card border color
-   ============================ */
-.post-template .fs-content-card,
-.page-template .fs-content-card {
-  border-color: var(--pu-card-border) !important;
-}
-.post-template .fs-content-card:hover,
-.page-template .fs-content-card:hover {
-  border-color: var(--pu-card-border-hover) !important;
-}
-
-/* Featured rail image borders should always follow the same accent-tinted border */
-.fs-rail-card__image{
-  border-color: var(--pu-card-border) !important;
-}
-.fs-rail-card__image:hover{
-  border-color: var(--pu-card-border-hover) !important;
-}
-
-/* Post feature image wrapper (post.hbs) */
-.fs-post-feature{
-  outline-color: var(--pu-card-border) !important;
-}
-.fs-post-feature:hover{
-  outline-color: var(--pu-card-border-hover) !important;
-}
-.fs-post-feature:hover::after{
-  box-shadow: inset 0 0 0 1px var(--pu-card-border-hover);
-}
-/* ============================
-   4leafclover: sidebar toggle (global)
-   ============================ */
-.fs-layout.has-sidebar .fs-sidebar { display: block; }
-.fs-layout.no-sidebar .fs-sidebar { display: none; }
-
-
-/* ---- Sidebar formatting restore ---- */
-.site-sidebar{
-  display:flex;
-  flex-direction:column;
-  gap:1.25rem;
-}
-
-.sidebar-section{
-  padding:1rem;
-}
-
-.sidebar-title{
-  margin:0 0 .5rem 0;
-}
-
-.sidebar-post-list{
-  list-style:none;
-  margin:0;
-  padding:0;
-  display:flex;
-  flex-direction:column;
-  gap:.9rem;
-}
-
-.sidebar-post{
-  list-style:none;
-  margin:0;
-  padding:0;
-  display:flex;
-  flex-direction:column;
-  gap:.35rem;
-}
-
-.sidebar-post-title{
-  font-weight:600;
-  text-decoration:none;
-}
-
-.sidebar-excerpt{
-  margin:0;
-}
-
-.sidebar-meta{
-  font-size:.75rem;
-  line-height:1.2;
-}
-
-.sidebar-tags{
-  margin-top:.15rem;
-}
-
-.sidebar-social{
-  display:flex;
-  gap:.5rem;
-}
-
-.sidebar-social a{
-  width:40px;
-  height:40px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border:1px solid var(--muted);
-  border-radius:.75rem;
-  text-decoration:none;
-  color:var(--pop);
-}
-
-.sidebar-social a:hover{
-  border-color:var(--pop);
-}
-
-/* CTA button fix */
-.sidebar-cta-button{
-  margin-top:.35rem;
-  border-radius:.75rem;
-}
-
-
-/* ---- Sidebar dividers between latest posts ---- */
-.sidebar-divider{
-  border: 0;
-  border-top: 1px solid var(--muted);
-  margin: .9rem 0;
-  opacity: .8;
-}
-
-/* ---- Sidebar CTA formatting ---- */
-.sidebar-cta-subtext{
-  margin: 0;
-  color: rgba(255,255,255,.72);
-}
-.sidebar-cta-button{
-  margin-top: .6rem;
-  width: 100%;
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--pop);
-  color: #0b0f12;
-  border: 1px solid var(--pop);
-  border-radius: .9rem;
-  text-decoration: none;
-  font-weight: 600;
-}
-.sidebar-cta-button:hover{
-  filter: brightness(1.05);
-}
-
-/* ---- Main feed meta uses accent color ---- */
-.post-meta,
-.post-meta a,
-.post-meta time,
-.post-meta .reading-time{
-  color: var(--pop);
-}
-/* Fallback meta selectors (safe) */
-.gh-card-meta,
-.gh-card-meta a,
-.gh-card-meta time{
-  color: var(--pop);
-}
-
-
-/* ---- Clickable rows (overlay links) ---- */
-.sidebar-post{ position: relative; }
-.sidebar-post-link{
-  position:absolute;
-  inset:0;
-  z-index:1;
-  border-radius:.75rem;
-}
-.sidebar-post-title,
-.sidebar-excerpt,
-.sidebar-meta,
-.sidebar-tags{
-  position: relative;
-  z-index:2;
-}
-.sidebar-post-title{
-  font-weight:600;
-  color: var(--pop);
-}
-
-/* Post cards/rows clickable without breaking inner links */
-.post-card, .post-row, .fs-card{
-  position: relative;
-}
-.post-card-link{
-  position:absolute;
-  inset:0;
-  z-index:1;
-  border-radius: 1rem;
-}
-.post-card a:not(.post-card-link),
-.post-row a:not(.post-card-link){
-  position: relative;
-  z-index:2;
-}
-
-/* ---- Social icon squares with SVG ---- */
-.sidebar-social{
-  display:flex;
-  gap:.5rem;
-}
-.sidebar-social .social-icon{
-  width:40px;
-  height:40px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border:1px solid var(--muted);
-  border-radius:.75rem;
-  text-decoration:none;
-  color:var(--pop);
-}
-.sidebar-social .social-icon:hover{
-  border-color: var(--pop);
-}
-.sidebar-social svg{
-  width:18px;
-  height:18px;
-  fill: currentColor;
-}
-
-
-/* ---- Sidebar latest rows clickable (overlay) ---- */
-.sidebar-post{ position: relative; padding: 0; }
-.sidebar-post-link{
-  position:absolute;
-  inset:0;
-  z-index: 5;
-  border-radius: .75rem;
-}
-.sidebar-post-title,
-.sidebar-excerpt,
-.sidebar-meta{
-  position: relative;
-  z-index: 6;
-}
-/* tags stay clickable above overlay */
-.sidebar-tags, .sidebar-tags a{
-  position: relative;
-  z-index: 7;
-}
-
-/* keep bullets off even if global styles leak */
-.sidebar-post-list{ list-style:none; padding:0; margin:0; }
-.sidebar-post{ list-style:none; }
-
-/* ---- Home feed meta + pagination accent ---- */
-.post-meta, .post-meta a, .post-meta time,
-.gh-card-meta, .gh-card-meta a, .gh-card-meta time,
-.fs-meta, .fs-meta a, .fs-meta time{
-  color: var(--pop);
-}
-
-/* Pagination */
-.pagination a,
-.pagination span,
-.pagination .page-number{
-  color: var(--pop);
-}
-.pagination a{
-  border-color: var(--pop);
-}
-.pagination a:hover{
-  filter: brightness(1.05);
-}
-
-/* Extra socials SVG rendering */
-.sidebar-social svg{ width:18px; height:18px; fill: currentColor; }
-
-/* Sidebar latest news tag bubbles */
-.sidebar-tags{
-  display:flex;
-  flex-wrap:wrap;
-  gap:.35rem;
-  margin-top:.15rem;
-}
-.sidebar-tags a{
-  display:inline-flex;
-  align-items:center;
-  padding:.15rem .5rem;
-  border-radius:999px;
-  border:1px solid var(--pop);
-  color: var(--pop);
-  text-decoration:none;
-  font-size:.7rem;
-  line-height:1;
-}
-.sidebar-tags a:hover{
-  filter: brightness(1.05);
-}
-
-/* Social icon layout: max 5 per row, wrap as needed */
-.sidebar-social{
-  display:grid;
-  grid-template-columns: repeat(5, 40px);
-  gap: .5rem;
-  justify-content: start;
-}
-@media (max-width: 460px){
-  .sidebar-social{ grid-template-columns: repeat(4, 40px); }
-}
-@media (max-width: 380px){
-  .sidebar-social{ grid-template-columns: repeat(3, 40px); }
-}
-.sidebar-social .social-icon{
-  width:40px;
-  height:40px;
-}
-
-/* Social icon layout: auto-fill available width, wrap naturally */
-.sidebar-social{
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
-  gap: .5rem;
-  justify-content: start;
-}
-.sidebar-social .social-icon{
-  width: 40px;
-  height: 40px;
-  justify-self: start;
-}
-
-
-
-/* ---- 404 page ---- */
-.fs-404{
-  position: relative;
-  min-height: calc(100vh - 140px);
-  display: grid;
-  place-items: center;
-  padding: 4rem 1.5rem;
-  border-radius: 1.25rem;
-  overflow: hidden;
-  background: rgba(255,255,255,0.03);
-}
-
-.fs-404.has-cover{
-  background-image: var(--fs404-cover);
-  background-size: cover;
-  background-position: center;
-}
-
-.fs-404__overlay{
-  position:absolute;
-  inset:0;
-  background: radial-gradient(ellipse at top, rgba(0,0,0,0.35), rgba(0,0,0,0.75));
-  z-index: 0;
-}
-
-.fs-404__content{
-  position: relative;
-  z-index: 1;
-  max-width: 720px;
-  width: 100%;
-  padding: 2rem 2rem;
-  text-align: center;
-  backdrop-filter: blur(10px);
-}
-
-.fs-404__code{
-  font-size: clamp(3rem, 7vw, 5rem);
-  line-height: 1;
-  font-weight: 800;
-  letter-spacing: .08em;
-  color: var(--pop);
-  margin-bottom: .75rem;
-}
-
-.fs-404__title{
-  margin: 0 0 .75rem 0;
-}
-
-.fs-404__subtitle{
-  margin: 0 auto 1.5rem auto;
-  max-width: 54ch;
-  opacity: .9;
-}
-
-.fs-404__actions{
-  display:flex;
-  justify-content:center;
-}
-
-.fs-404__btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-height: 44px;
-  padding: .7rem 1.1rem;
-  border-radius: .9rem;
-  background: var(--pop);
-  border: 1px solid var(--pop);
-  color: #0b0f12;
-  text-decoration: none;
-  font-weight: 700;
-}
-.fs-404__btn:hover{ filter: brightness(1.05); }
-
-/* Sidebar latest news: make entire row clickable (including title/excerpt/meta) */
-.sidebar-post{ position: relative; cursor: pointer; }
-.sidebar-post-link{
-  position:absolute;
-  inset:0;
-  z-index: 10;              /* above text */
-  border-radius: .75rem;
-}
-
-/* content should NOT look like separate links */
-.sidebar-post-title,
-.sidebar-excerpt,
-.sidebar-meta{
-  position: relative;
-  z-index: 5;               /* below overlay so clicks go to row */
-  text-decoration: none;
-}
-.sidebar-post-title:hover,
-.sidebar-excerpt:hover,
-.sidebar-meta:hover{
-  text-decoration: none;
-}
-
-/* tags remain interactive above overlay */
-.sidebar-tags, .sidebar-tags a{
-  position: relative;
-  z-index: 11;
-}
-
-/* remove link-like hover styling inside sidebar rows */
-.sidebar-post a{ text-decoration: none; }
-.sidebar-post:hover .sidebar-post-title{ color: inherit; }
-
-/* Read more styling */
-.sidebar-readmore{
-  margin-left: .25rem;
-  color: var(--pop);
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-/* Home page posts: make title/excerpt/meta clickable via overlay, but don't look like links */
-.home-post-link{
-  position:absolute;
-  inset:0;
-  z-index: 10;
-  display:block;
-  border-radius: 1rem;
-}
-
-/* Ensure common containers are positioned */
-.post-card, .post-row, .gh-card, article.post-card, article.post-row, article.gh-card, article{
-  position: relative;
-}
-
-/* Remove underline/blue hover look */
-.gh-card-title a,
-.post-card-title a,
-.post-title a,
-.gh-card-meta a,
-.post-meta a{
-  color: inherit;
-  text-decoration: none;
-}
-
-/* Let overlay capture clicks */
-.gh-card-title a,
-.post-card-title a,
-.post-title a,
-.gh-card-meta a,
-.post-meta a{
-  pointer-events: none;
-}
-
-/* Keep tags clickable */
-.gh-card-tags a,
-.post-tags a,
-.tag a{
-  pointer-events: auto;
-  position: relative;
-  z-index: 11;
-}
-
-/* Home feed post rows: ensure row overlay covers title/excerpt/meta */
-.fs-postrow-inner{ position: relative; }
-.fs-row-hit{ z-index: 10; }
-
-/* Ensure the content doesn't block clicks */
-.fs-row-content,
-.fs-row-title,
-.fs-excerpt,
-.meta{
-  position: relative;
-  z-index: 5;
-  pointer-events: none;
-}
-
-/* Keep tags clickable */
-.fs-tagline, .fs-tagline a, .fs-pill{
-  pointer-events: auto;
-  position: relative;
-  z-index: 11;
-}
-
-/* Keep thumbnail clickable but still allow full-row click on text area */
-.thumb-link{ position: relative; z-index: 11; }
-
-/* Replace overly-generic .content selector if present */
-.fs-row-content{
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-/* Fix: ensure post cards position context so overlay doesn't cover header/nav */
-.fs-postcard{ position: relative; }
-
-/* Make card content clickable via overlay without link styling */
-.fs-postcard-title, .fs-postcard-excerpt, .meta{ pointer-events: none; }
-.meta a{ pointer-events: auto; text-decoration: none; color: var(--pop); }
-.meta a:hover{ text-decoration: none; }
-
-/* Protect header/nav from overlay hit areas */
-.fs-header, .fs-nav, .site-header, .site-nav{ position: relative; z-index: 50; }
-
-/* Home hero cover banner + featured rail */
-.fs-home-hero{
-  position: relative;
-  width: 100%;
-  margin: 0 0 1.25rem 0;
-  padding: 0;
-  overflow: hidden;
-  border-radius: 1.25rem;
-  min-height: 330px;
-}
-
-.fs-home-hero__bg{
-  position:absolute;
-  inset:0;
-  /* Use background-image instead of shorthand to avoid mobile browser parsing quirks */
-  background-image: var(--fs-hero-bg);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  transform: scale(1.02);
-}
-
-.fs-home-hero__overlay{
-  position:absolute;
-  inset:0;
-  background: radial-gradient(ellipse at top, rgba(0,0,0,0.25), rgba(0,0,0,0.75));
-}
-
-.fs-home-hero__inner{
-  position: relative;
-  z-index: 2;
-  padding: 2rem 0;
-}
-
-.fs-featured-rail-shell{
-  margin-top: 0;
-  transform: none;
-}
-
-.fs-featured-rail{
-  margin: 0 auto;
-  max-width: var(--max-width, 1200px);
-  padding: 1rem 0;
-}
-
-.fs-featured-rail__head{
-  display:flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: .75rem;
-}
-.fs-featured-rail__title{
-  margin: 0;
-  font-size: 1.05rem;
-  letter-spacing: .02em;
-}
-
-.fs-featured-rail__track{
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(220px, 1fr);
-  gap: .85rem;
-  overflow-x: auto;
-  padding-bottom: .25rem;
-  padding-inline: 4.75rem;
-  scroll-snap-type: x mandatory;
-}
-.fs-featured-rail__track::-webkit-scrollbar{ height: 8px; }
-.fs-featured-rail__track::-webkit-scrollbar-thumb{ background: rgba(255,255,255,0.15); border-radius: 999px; }
-
-.fs-rail-card{
-  position: relative;
+.fs-header-inner {
   display: flex;
-  flex-direction: column;
-  border-radius: 0;
-  border: none;
-  scroll-snap-align: start;
-  overflow: hidden;
-  padding: 0;
-  background: transparent;
-  background-color: transparent;
-  box-shadow: none;
-}
-.fs-rail-card__hit{
-  position:absolute;
-  inset:0;
-  z-index: 2;
-}
-.fs-rail-card__title{
-  position: relative;
-  z-index: 1;
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 950;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.fs-rail-card__excerpt{
-  position: relative;
-  z-index: 1;
-  margin: .45rem 0 0;
-  color: var(--subtext);
-  font-weight: 700;
-  /* keeps long excerpts from turning into a skyscraper */
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.fs-rail-card__meta{
-  position: relative;
-  z-index: 1;
-  margin-top: .75rem;
-  display:flex;
-  flex-wrap: wrap;
-  gap:.6rem;
-  align-items:center;
-  color: var(--subtext);
-  font-size:.8rem;
-  font-weight: 900;
-}
-.fs-rail-card__tags{
-  position: relative;
-  z-index: 3; /* above hit so tags clickable */
-  display:flex;
-  flex-wrap: wrap;
-  gap:.35rem;
-  margin-top: .55rem;
-}
-.fs-rail-card__tags a{
-  display:inline-flex;
-  padding:.15rem .5rem;
-  border-radius: 999px;
-  border: 1px solid var(--pop);
-  color: var(--pop);
-  text-decoration:none;
-  font-size:.7rem;
-  line-height:1;
-}
-
-/* Ensure tags remain clickable despite overlay hit */
-.fs-rail-card__tags a{ position: relative; z-index: 4; }
-
-/* Full-width publication cover hero */
-.fs-home-hero{
-  width: 100%;
-  margin-left: 0;
-  margin-right: 0;
-  border-radius: 0;
-}
-
-@supports (width: 100dvw){
-  .fs-home-hero{
-    width: 100dvw;
-    margin-left: calc(50% - 50dvw);
-    margin-right: calc(50% - 50dvw);
-  }
-}
-
-@supports (width: 100svw){
-  .fs-home-hero{
-    width: 100svw;
-    margin-left: calc(50% - 50svw);
-    margin-right: calc(50% - 50svw);
-  }
-}
-
-.fs-home-hero__inner{
-  max-width: var(--max-width, 1200px);
-  margin: 0 auto;
-  padding-left: 1.25rem;
-  padding-right: 1.25rem;
-}
-
-/* Home hero: do NOT tint/alter the publication cover image */
-.fs-home-hero__overlay{ display:none !important; } /* safety if older rule exists */
-
-/* Ensure hero background shows true colors */
-.fs-home-hero__bg{
-  filter: none !important;
-  opacity: 1 !important;
-}
-
-/* Featured rail: no enclosing container, just track on hero */
-.fs-featured-rail__track{
-  margin: 0 auto;
-  padding-block: 1.25rem;
-  padding-inline: 4.75rem;
-}
-
-/* Rail cards keep the glassy look individually */
-.fs-rail-card{
-  padding: 0;
-  background: transparent;
-  background-color: transparent;
-  box-shadow: none;
-  backdrop-filter: none;
-}
-
-/* Image above content */
-.fs-rail-card__image{
-  position: relative;
-  z-index: 1;
-  margin: 0 0 .6rem 0;
-  border-radius: .9rem;
-  overflow: hidden;
-  border: 1px solid var(--pu-card-border);
-  height: 150px;
-}
-.fs-rail-card__image img{
-  display:block;
-  width:100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Featured rail controls (show when rail overflows) */
-.fs-rail-controls{
-  position: relative;
-}
-
-.fs-rail-btn{
-    padding: 0;
-position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 44px;
-  height: 44px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.18);
-  background: rgba(217,119,46,0.35);
-  background: color-mix(in srgb, var(--accent) 35%, transparent);
-  backdrop-filter: blur(10px);
-  color: var(--text);
-  font-size: 28px;
-  line-height: 1;
-  display: none; /* toggled via JS when overflow exists */
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 20;
-}
-
-.fs-rail-btn--prev{ left: 1rem; }
-.fs-rail-btn--next{ right: 1rem; }
-
-.fs-rail-btn:hover{
-  border-color: rgba(255,255,255,0.28);
-  color: var(--pop);
-}
-
-@media (max-width: 800px){
-  .fs-rail-btn--prev{ left: .75rem; }
-  .fs-rail-btn--next{ right: .75rem; }
-}
-
-@media (max-width: 800px){
-  .fs-featured-rail__track{ padding-inline: 3.25rem; }
-}
-
-/* Limit post feature images to 250px tall without distortion */
-.gh-feature-image,
-.post-feature-image,
-.fs-feature-image{
-  overflow: hidden;  border-radius: 1.25rem;
-  border: 1px solid var(--pu-card-border);
-}
-
-
-.gh-feature-image img,
-.post-feature-image img,
-.fs-feature-image img,
-.gh-content .kg-image-card img{
-  max-height: 250px;
-  width: 100%;
-  height: 250px;
-  object-fit: cover; /* preserves aspect ratio (crops instead of squishing) */
-  display: block;
-}
-
-/* Featured rail arrow controls */
-.fs-rail-controls{ position: relative; }
-.fs-rail-btn{
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 46px;
-  height: 46px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.18);
-  background: rgba(217,119,46,0.35);
-  background: color-mix(in srgb, var(--accent) 35%, transparent);
-  backdrop-filter: blur(10px);
-  color: var(--text);
-  font-size: 30px;
-  line-height: 1;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 30;
-}
-.fs-rail-btn--prev{ left: .75rem; }
-.fs-rail-btn--next{ right: .75rem; }
-@media (max-width: 800px){
-  .fs-rail-btn--prev{ left: .5rem; }
-  .fs-rail-btn--next{ right: .5rem; }
-}
-.fs-rail-btn:hover{ color: var(--pop); border-color: rgba(255,255,255,0.28); }
-
-/* Featured rail: target ~4 cards visible on desktop */
-@media (min-width: 1000px){
-  .fs-featured-rail__track{
-    grid-auto-columns: calc((100% - (3 * .85rem)) / 4);
-  }
-}
-
-
-@media (max-width: 800px){
-  .fs-featured-rail__track{ padding-inline: 2.75rem; }
-}
-
-
-/* ===== Featured Rail Layout (Non-overlapping arrows) ===== */
-.fs-featured-rail-shell{
-  position: relative;
-  margin-top: 0;
-  /* single place to tune arrow gutter */
-  --fs-rail-arrow-gutter: 72px;
-}
-
-/* reserve space so arrow buttons never sit on top of cards */
-.fs-featured-rail-shell__inner{
-  padding-inline: var(--fs-rail-arrow-gutter);
-}
-
-@media (max-width: 680px){
-  .fs-featured-rail-shell{ --fs-rail-arrow-gutter: 56px; }
-}
-
-.fs-featured-rail-shell__arrows{
-  position: absolute;
-  inset-block: 0;
-  /* keep arrows comfortably inside the reserved gutter */
-  inset-inline: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  pointer-events: none; /* allow clicks through except on buttons */
-  z-index: 5;
-}
-
-.fs-featured-rail-shell__arrows .fs-rail-btn{
-  pointer-events: auto;
-}
-
-.fs-featured-rail__viewport{
-  overflow: hidden; /* hard clip so no peeking outside the viewport */
-}
-
-.fs-featured-rail__track{
-  --fs-rail-gap: 22px;
-  --fs-rail-cols: 4;
-
-  display: flex;
-  gap: var(--fs-rail-gap);
-
-  /* the track scrolls; the viewport clips */
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
-
-  padding-bottom: 6px;
-  scrollbar-width: none;
-}
-.fs-featured-rail__track::-webkit-scrollbar{ display:none; }
-
-/* Ensure card sizing truly obeys our calc (prevent any global min-width rules from breaking it) */
-.fs-featured-rail__track .fs-rail-card{
-  scroll-snap-align: start;
-  min-width: 0;
-  flex: 0 0 calc((100% - (var(--fs-rail-gap) * (var(--fs-rail-cols) - 1))) / var(--fs-rail-cols) + 2px);
-}
-
-@media (max-width: 1100px){
-  .fs-featured-rail__track{ --fs-rail-cols: 3; }
-}
-
-@media (max-width: 780px){
-  .fs-featured-rail__track{ --fs-rail-cols: 2; }
-}
-
-@media (max-width: 520px){
-  .fs-featured-rail__track .fs-rail-card{
-    flex-basis: 88%;
-}
-}
-
-
-.fs-featured-rail-shell .fs-rail-btn{ box-sizing: border-box; }
-
-/* Arrow centering tweak (fallback) */
-.fs-rail-btn{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  line-height: 1;
-}
-
-
-/* ===== Rail Arrow Override (thicker ring + centered glyph) ===== */
-.fs-featured-rail-shell .fs-rail-btn,
-.fs-rail-controls .fs-rail-btn{
-  border-width: 6px !important;
-  border-style: solid !important;
-  border-color: color-mix(in srgb, var(--accent) 85%, rgba(255,255,255,0.12)) !important;
-  box-sizing: border-box;
-}
-
-.fs-featured-rail-shell .fs-rail-btn__icon{
-  transform: translateY(-2px);
-}
-
-/* If the buttons are using raw text arrows (no span), nudge via line-height */
-.fs-featured-rail-shell .fs-rail-btn,
-.fs-rail-controls .fs-rail-btn{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 !important;
-  line-height: 1 !important;
-}
-
-
-
-/* ===== Post Featured Image Formatting ===== */
-.fs-post-feature{
-  max-height: 300px;
-  overflow: hidden;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,0.10);
-}
-
-.fs-post-feature img{
-  display: block;
-  width: 100%;
-  height: 300px;
-  object-fit: cover;       /* keeps aspect ratio, no squish */
-  object-position: center; /* smart crop */
-}
-
-
-
-/* ===== Home Post Row Title Alignment Fix ===== */
-.fs-postrow .fs-row-title{
-  margin: 0;
-  padding: 0;
-  line-height: 1.15;
-}
-
-
-
-/* ===== Home Meta Accent Color ===== */
-.fs-postrow .meta{
-  color: var(--accent);
-}
-.fs-postrow .meta .meta-item{
-  color: var(--accent);
-}
-
-
-
-
-/* ===== Breadcrumbs ===== */
-.fs-breadcrumbs{
-  display: flex;
-  flex-wrap: wrap;
-  gap: .45rem;
-  align-items: center;
-  margin: 0 0 1rem;
-  font-weight: 900;
-  font-size: .85rem;
-}
-.fs-breadcrumbs .fs-crumb{
-  color: var(--accent);
-  text-decoration: none;
-}
-.fs-breadcrumbs .fs-crumb:hover{
-  text-decoration: underline;
-}
-.fs-breadcrumbs .fs-crumb-current{
-  color: var(--accent);
-  opacity: .9;
-}
-.fs-breadcrumbs .fs-crumb-sep{
-  color: var(--accent);
-  opacity: .55;
-}
-
-
-/* ===== Sticky footer / minimum page height ===== */
-html, body{
-  height: 100%;
-}
-body{
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-main.fs-main, .site-main{
-  flex: 1 0 auto;
-}
-.site-footer, footer{
-  margin-top: auto;
-}
-
-
-
-/* ===== Sidebar CTA: remove double-border artifacts ===== */
-.sidebar-cta{
-  border: 1px solid var(--muted);
-}
-.sidebar-cta .fs-card{
-  border: none;
-  box-shadow: none;
-}
-
-
-
-/* ===== Grid Column Consistency ===== */
-@media (min-width: 1024px){
-  .fs-grid{
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-    align-items: start;
-  }
-  .fs-grid > *{
-    min-width: 0;
-  }
-}
-
-
-
-/* ===== Non-home page layout consistency ===== */
-.fs-content-card{
-  width: 100%;
-  display: block;
-}
-
-/* ===== Tablet/Android landscape overflow guard (post/page) =====
-   Some tablet viewports + fractional pixel rounding can cause inner content to exceed the card by a few px.
-   We avoid clipping by letting the card be visible and constraining rich content blocks instead.
-*/
-.post-template .fs-content-card,
-.page-template .fs-content-card{
-  overflow: visible;
-}
-
-/* Keep Koenig/Editor blocks from forcing horizontal overflow */
-.post-template .gh-content,
-.page-template .gh-content{
-  max-width: 100%;
-}
-
-.post-template .gh-content > *,
-.page-template .gh-content > *{
-  max-width: 100%;
-}
-
-/* Code blocks & tables: scroll internally instead of pushing layout */
-.post-template .gh-content pre,
-.page-template .gh-content pre,
-.post-template .gh-content table,
-.page-template .gh-content table{
-  max-width: 100%;
-  overflow-x: auto;
-}
-
-.post-template .gh-content table,
-.page-template .gh-content table{
-  display: block;
-}
-
-/* Safety: long links/words shouldn't force overflow */
-.post-template .gh-content,
-.page-template .gh-content{
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-
-
-.fs-grid > article,
-.fs-grid > aside{
-  min-width: 0;
-}
-
-/* Make empty pages still feel consistent */
-.fs-page-content{
-  margin-top: 1.25rem;
-}
-
-
-
-/* ===== Page Content Defaults ===== */
-.fs-page-content{
-  color: var(--text);
-}
-
-
-
-
-
-
-
-
-/* ===== Header Actions Width (matches sidebar) ===== */
-@media (min-width: 1024px){
-  .fs-actions{
-    width: var(--fs-actions-width);
-    justify-content: flex-end;
-  }
-}
-
-
-/* ===== Layout Stability v3.3 (hard columns, no underlap) =====
-   Keep fs-grid aligned to the header container width, but compute the content track explicitly.
-   This removes fractional rounding that can make the content track "steal" pixels from the sidebar.
-*/
-:root{
-  --fs-shell-max: 72rem;            /* must match .fs-container max-width */
-  --fs-actions-width: calc(22rem - 30px);        /* header actions width */
-  --fs-sidebar-width: var(--fs-actions-width);
-  --fs-grid-gap: 1.75rem;
-  --fs-grid-pad: 0rem;
-}
-
-@media (min-width: 1200px){
-  .fs-grid{
-    box-sizing: border-box;
-    width: 100%;
-    max-width: var(--fs-shell-max);
-    margin-inline: auto;
-gap: var(--fs-grid-gap);
-    grid-template-columns:
-      minmax(0, calc(100% - var(--fs-sidebar-width) - var(--fs-grid-gap)))
-      var(--fs-sidebar-width);
-    align-items: start;
-  }
-
-  .fs-grid > article{
-    min-width: 0;
-  }
-
-  .fs-grid > aside{
-    width: var(--fs-sidebar-width);
-    max-width: var(--fs-sidebar-width);
-    min-width: var(--fs-sidebar-width);
-    justify-self: end;
-    align-self: start;
-  }
-}
-
-@media (min-width: 1024px) and (max-width: 1199px){
-  .fs-grid{
-    box-sizing: border-box;
-gap: var(--fs-grid-gap);
-    grid-template-columns: minmax(0, 1fr) var(--fs-sidebar-width);
-    align-items: start;
-  }
-  .fs-grid > aside{
-    width: var(--fs-sidebar-width);
-    max-width: var(--fs-sidebar-width);
-    min-width: var(--fs-sidebar-width);
-  }
-  .fs-grid > article{
-    min-width: 0;
-  }
-}
-
-/* ===== Prevent visual overlap: clip content card bleed ===== */
-.fs-grid > article.fs-card,
-.fs-content-card{
-  overflow: hidden;           /* prevents image/shadow bleed into sidebar column */
-  position: relative;
-  isolation: isolate;
-}
-
-
-
-
-
-
-
-
-
-/* ===== Content Wrap Width + No Padding ===== */
-.fs-content-wrap{
-  padding: 0;
-}
-
-@media (min-width: 1024px){
-  .fs-content-wrap{
-    /*
-      IMPORTANT:
-      This element lives inside the two-column .fs-grid on post/page templates.
-      A fixed min/max width here can exceed the available article column width
-      (especially inside the 72rem shell), causing a right-edge "cut off" on
-      tablet landscape Chrome.
-
-      Keep line-length readable without forcing overflow.
-    */
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
-
-
-
-
-/* ===== Sidebar overflow guardrails ===== */
-.site-sidebar,
-.fs-sidebar,
-.site-sidebar *{
-  box-sizing: border-box;
-}
-
-.site-sidebar{
-  width: 100%;
-  max-width: 100%;
-  overflow: hidden; /* prevents any child from visually pushing outside */
-}
-
-.site-sidebar .fs-card,
-.site-sidebar .sidebar-section,
-.site-sidebar .sidebar-cta{
-  width: 100%;
-  max-width: 100%;
-}
-
-.site-sidebar img,
-.site-sidebar svg{
-  max-width: 100%;
-}
-
-
-
-
-
-
-
-/* ===== Post feature: full-bleed inside wrapper + vertical spacing ===== */
-.fs-post-feature{
-  display: block;
-  width: 100%;
-  margin: 1.25rem 0; /* add back top/bottom spacing, keep edges flush */
-  padding: 0 !important;
-}
-
-
-/* ===== Post feature: cover (cropped), no height rules ===== */
-.fs-post-feature{
-  overflow: hidden;
-}
-
-.fs-post-feature img{
-  display: block;
-  width: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-
-
-
-
-
-
-/* ===== Fix: avoid fs-card overflow inside grids (tag/feed) ===== */
-.fs-grid > article.fs-card{
-  width: 100%;
-}
-
-.fs-grid .post-card.fs-card,
-.fs-grid .fs-card.post-card,
-.fs-grid .gh-card.fs-card{
-  width: auto;
-  max-width: 100%;
-}
-
-
-
-/* ===== Excerpt trim (approx 25% of previous) ===== */
-.post-card-excerpt,
-.gh-card-excerpt,
-.post-excerpt{
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  -webkit-line-clamp: 2; /* keep it tight */
-  line-clamp: 2;
-}
-
-
-
-/* ===== Excerpt trim (tag/feed cards) ===== */
-.fs-postcard-excerpt{
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-}
-
-
-
-/* ===== Sidebar Related Posts (polish) ===== */
-.sidebar-related-list{
-  list-style: none !important;
-  padding-left: 0 !important;
-  margin-left: 0 !important;
-  margin-top: .75rem;
-  display: grid;
-  gap: .75rem;
-}
-
-.sidebar-related-item{
-  margin: 0;
-}
-
-.sidebar-related-link{
-  display: block;
-  font-weight: 900;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
-}
-
-.sidebar-related-meta{
-  margin-top: .35rem;
-  font-size: .82rem;
-  opacity: .85;
-  display: flex;
-  gap: .4rem;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.sidebar-related-author,
-.sidebar-related-read,
-.sidebar-related-meta time{
-  font-weight: 700;
-}
-
-.sidebar-related-sep{
-  opacity: .6;
-}
-
-.sidebar-related-hr{
-  border: 0;
-  border-top: 1px solid rgba(255,255,255,.12);
-  margin: .25rem 0 0;
-}
-
-/* Make each item feel like a clickable card row */
-.sidebar-related-item:hover .sidebar-related-link{
-  color: var(--accent);
-  text-decoration: underline;
-}
-
-
-
-/* ===== Sidebar Related Posts: small-caps titles ===== */
-.sidebar-related-link{
-  font-variant-caps: all-small-caps;
-  letter-spacing: 0.04em;
-}
-
-
-
-/* ===== Sidebar "More on" title tag label ===== */
-.sidebar-title-tag{
-  opacity: .9;
-  font-weight: 900;
-  margin-left: .35rem;
-}
-
-
-
-/* ===== Contact Page Form ===== */
-.fs-contact-form{
-  margin: 0 0 1.25rem;
-  padding: 1.25rem;
-  border-radius: 18px;
-  background: rgba(0,0,0,.30);
-  box-shadow: 0 10px 28px rgba(0,0,0,.35);
-  border: 1px solid rgba(255,255,255,.08);
-}
-
-.fs-contact-grid{
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: .9rem;
-}
-
-@media (min-width: 768px){
-  .fs-contact-grid{ grid-template-columns: 1fr 1fr; }
-}
-
-.fs-contact-field{
-  display: block;
-  margin: 0 0 .9rem;
-}
-
-.fs-contact-label{
-  display: block;
-  font-weight: 900;
-  font-variant-caps: all-small-caps;
-  letter-spacing: .05em;
-  opacity: .9;
-  margin: 0 0 .35rem;
-}
-
-.fs-contact-input,
-.fs-contact-textarea{
-  width: 100%;
-  max-width: 100%;
-  border-radius: 12px;
-  padding: .8rem .9rem;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(0,0,0,.35);
-  color: var(--text);
-  outline: none;
-}
-
-.fs-contact-textarea{ resize: vertical; }
-
-.fs-contact-input:focus,
-.fs-contact-textarea:focus{
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(0,0,0,.0);
-}
-
-.fs-contact-honey{ display:none !important; }
-
-.fs-contact-submit{
-  margin-top: .25rem;
-}
-
-.fs-contact-note{
-  margin: .85rem 0 0;
-  font-size: .85rem;
-  opacity: .8;
-}
-
-.fs-contact-note code{
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: .9em;
-}
-
-
-
-/* ===== Contact form status ===== */
-.fs-contact-status{
-  margin-top: .75rem;
-  font-weight: 800;
-  opacity: .9;
-}
-
-
-
-
-
-/* ===== Header layout: desktop nav, mobile hamburger + icons ===== */
-.fs-header-inner{
-  display:flex;
-  align-items:center;
   justify-content: space-between;
   gap: 1rem;
+  padding: .65rem 0;
 }
 
-.fs-brand-nav{
-  display:flex;
-  align-items:center;
+.fs-brand-nav {
+  display: flex;
+  align-items: center;
   gap: .9rem;
   min-width: 0;
 }
 
-.fs-logo-link{
-  display:flex;
-  align-items:center;
+.fs-logo-link {
+  display: flex;
+  align-items: center;
   gap: .6rem;
-  text-decoration:none;
+  text-decoration: none;
   color: var(--text);
   min-width: 0;
 }
 
-.fs-site-logo{
-  display:block;
+.fs-site-logo {
+  display: block;
   height: 34px;
   width: auto;
 }
 
-.fs-site-title{
+.fs-site-title {
   font-weight: 900;
   letter-spacing: -0.02em;
   font-size: 1.1rem;
   white-space: nowrap;
 }
 
-.fs-nav .nav{
-  list-style:none;
-  padding:0;
-  margin:0;
-  display:flex;
-  gap: .9rem;
-  align-items:center;
+.fs-nav {
+  display: flex;
+  align-items: center;
 }
 
-.fs-actions{
-  display:flex;
-  align-items:center;
-  gap: .6rem;
+.fs-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.fs-nav li {
+  margin: 0;
+  padding: 0;
+}
+
+.fs-nav a {
+  color: var(--subtext);
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  display: inline-flex;
+  align-items: center;
+}
+
+.fs-nav a:hover {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.fs-actions {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
   flex-wrap: nowrap;
 }
 
-.fs-btn-icon{
-  display:inline-flex;
-  align-items:center;
-  gap: .5rem;
+.fs-btn {
+  border-radius: .9rem;
+  padding: .42rem .62rem;
+  border: 1px solid var(--muted);
+  background: transparent;
+  color: var(--subtext);
+  font-weight: 800;
+  font-size: .85rem;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.fs-btn:hover { color: var(--text); }
+
+.fs-btn-primary {
+  border: none;
+  background: var(--accent);
+  color: #000;
+  padding: .42rem .72rem;
+}
+.fs-btn-primary:hover { opacity: .92; }
+
+.fs-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
 }
 
-.fs-btn-icon__svg{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
+.fs-btn-icon__svg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
 }
 
-.fs-icon-moon{ display:none; }
+.fs-btn-icon__label { font-size: .85rem; }
 
-/* Toggle icons based on theme attribute/class.
-   This supports common patterns: [data-theme="dark"] or .theme-dark on html/body */
-html[data-theme="dark"] .fs-icon-sun,
-body.theme-dark .fs-icon-sun{ display:none; }
-
-html[data-theme="dark"] .fs-icon-moon,
-body.theme-dark .fs-icon-moon{ display:inline; }
-
-@media (max-width: 768px){
-  /* Mobile header order: hamburger - logo - actions */
-  .fs-nav{ display:none; }
-
-  .fs-nav-toggle{ display:inline-flex; }
-
-  .fs-site-logo{ height: 30px; }
-
-  /* keep action buttons compact: hide labels, keep icons */
-  .fs-btn-icon__label{ display:none; }
-
-  /* signup can be wide; keep its label */
-  .fs-actions .fs-btn-primary .fs-btn-icon__label{ display:inline; }
+/* normalize all header button heights */
+.fs-header .fs-actions .fs-btn,
+.fs-header .fs-actions .fs-btn-primary,
+.fs-header .fs-actions #themeToggle {
+  height: 44px;
+  min-height: 44px;
+  line-height: 44px;
+  padding-top: 0;
+  padding-bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Hamburger button */
-.fs-nav-toggle{
-  display:none;
+@media (max-width: 768px) {
+  .fs-header .fs-actions .fs-btn,
+  .fs-header .fs-actions .fs-btn-primary,
+  .fs-header .fs-actions #themeToggle {
+    height: 42px;
+    min-height: 42px;
+    line-height: 42px;
+  }
+}
+
+/* hamburger */
+.fs-nav-toggle {
+  display: none;
   width: 40px;
   height: 40px;
   border-radius: 999px;
   border: 2px solid rgba(255,255,255,.25);
-  background: rgba(0,0,0,.20);
+  background: #000;
   align-items: center;
   justify-content: center;
   padding: 0;
 }
 
-.fs-nav-toggle-bars{
+.fs-nav-toggle-bars {
   width: 18px;
   height: 12px;
   position: relative;
@@ -2223,7 +371,7 @@ body.theme-dark .fs-icon-moon{ display:inline; }
 }
 
 .fs-nav-toggle-bars::before,
-.fs-nav-toggle-bars::after{
+.fs-nav-toggle-bars::after {
   content: "";
   position: absolute;
   left: 0;
@@ -2233,18 +381,46 @@ body.theme-dark .fs-icon-moon{ display:inline; }
   border-radius: 2px;
 }
 
-.fs-nav-toggle-bars::before{ top: 1px; }
-.fs-nav-toggle-bars::after{ bottom: 1px; }
+.fs-nav-toggle-bars::before { top: 1px; }
+.fs-nav-toggle-bars::after  { bottom: 1px; }
 
-.fs-nav-toggle:focus{
+.fs-nav-toggle:focus {
   outline: none;
   border-color: var(--accent);
 }
 
+/* theme toggle icons */
+.fs-icon-moon { display: none; }
+
+html[data-theme="dark"] .fs-icon-sun,
+body.theme-dark .fs-icon-sun  { display: none; }
+
+html[data-theme="dark"] .fs-icon-moon,
+body.theme-dark .fs-icon-moon { display: inline; }
+
+#themeToggle .fs-btn-icon__svg { margin: 0; }
+
+@media (min-width: 1024px) {
+  .fs-actions {
+    width: var(--fs-actions-width);
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 768px) {
+  .fs-nav              { display: none; }
+  .fs-nav-toggle       { display: inline-flex !important; }
+  .fs-site-logo        { height: 30px; }
+  .fs-btn-icon__label  { display: none; }
+  /* keep signup label visible */
+  .fs-actions .fs-btn-primary .fs-btn-icon__label { display: inline; }
+}
 
 
-/* ===== Mobile Drawer ===== */
-.fs-mobile-drawer{
+/* ============================================================
+   5. Mobile drawer
+   ============================================================ */
+.fs-mobile-drawer {
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -2253,18 +429,18 @@ body.theme-dark .fs-icon-moon{ display:inline; }
   transition: opacity .18s ease;
 }
 
-.fs-mobile-drawer.is-open{
+.fs-mobile-drawer.is-open {
   pointer-events: auto;
   opacity: 1;
 }
 
-.fs-mobile-drawer__backdrop{
+.fs-mobile-drawer__backdrop {
   position: absolute;
   inset: 0;
   background: rgba(0,0,0,.65);
 }
 
-.fs-mobile-drawer__panel{
+.fs-mobile-drawer__panel {
   position: absolute;
   top: 0;
   left: 0;
@@ -2278,25 +454,25 @@ body.theme-dark .fs-icon-moon{ display:inline; }
   padding: 1rem 1rem 1.25rem;
 }
 
-.fs-mobile-drawer.is-open .fs-mobile-drawer__panel{
+.fs-mobile-drawer.is-open .fs-mobile-drawer__panel {
   transform: translateX(0);
 }
 
-.fs-mobile-drawer__top{
+.fs-mobile-drawer__top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: .75rem;
 }
 
-.fs-mobile-drawer__label{
+.fs-mobile-drawer__label {
   font-weight: 900;
   letter-spacing: .06em;
   font-variant-caps: all-small-caps;
   opacity: .9;
 }
 
-.fs-mobile-drawer__close{
+.fs-mobile-drawer__close {
   width: 40px;
   height: 40px;
   border-radius: 999px;
@@ -2307,7 +483,7 @@ body.theme-dark .fs-icon-moon{ display:inline; }
   line-height: 1;
 }
 
-.fs-mobile-drawer__nav .nav{
+.fs-mobile-drawer__nav .nav {
   list-style: none;
   padding: 0;
   margin: .25rem 0 0;
@@ -2315,264 +491,216 @@ body.theme-dark .fs-icon-moon{ display:inline; }
   gap: .25rem;
 }
 
-.fs-mobile-drawer__nav .nav a{
+.fs-mobile-drawer__nav .nav a {
   display: block;
-  padding: .75rem .75rem;
+  padding: .75rem;
   border-radius: 14px;
   font-weight: 900;
   letter-spacing: -0.01em;
   text-decoration: none;
-  background: rgba(255,255,255,.03);
+  background: #000 !important;
   border: 1px solid rgba(255,255,255,.08);
 }
 
 
-html.fs-lock, html.fs-lock body{ overflow:hidden; }
-
-
-/* ===== Header: prevent action button text wrapping ===== */
-.fs-actions .fs-btn,
-.fs-actions .fs-btn-primary{
-  white-space: nowrap;
-  flex-shrink: 0;
+/* ============================================================
+   6. Layout
+   ============================================================ */
+.fs-main {
+  padding-top: 0 !important;
 }
 
-
-
-/* ===== Fix: ensure hamburger shows on mobile ===== */
-@media (max-width: 768px){
-  .fs-nav-toggle{ display: inline-flex !important; }
-}
-
-
-
-
-/* ===== Header hamburger: solid black background ===== */
-.fs-header .fs-nav-toggle{ background:#000 !important; }
-
-
-/* ===== Theme toggle: icon only ===== */
-#themeToggle .fs-btn-icon__svg{ margin: 0; }
-
-
-
-/* ===== Mobile drawer nav buttons: solid black ===== */
-.fs-mobile-drawer__nav .nav a{
-  background: #000 !important;
-}
-
-
-
-/* ===== Featured rail: ensure it sits above the page content ===== */
-.fs-home-hero{
-  position: relative;
-  z-index: 5;
-  overflow: visible;
-}
-
-/* Rail is transformed; give it its own stacking priority */
-.fs-featured-rail-shell{
-  z-index: 50;
-}
-
-/* Make sure the main feed doesn't cover the rail */
-.site-main,
-main.site-main,
-.fs-home-feed,
-.post-feed{
-  position: relative;
-  z-index: 1;
-}
-
-
-/* ===== Home hero spacing: tighten gap under header ===== */
-body.home-template .fs-main{
+body.home-template .fs-main {
   padding-top: 0.85rem;
 }
-@media (max-width: 768px){
-  body.home-template .fs-main{ padding-top: 0.65rem; }
+
+@media (max-width: 768px) {
+  body.home-template .fs-main { padding-top: 0.65rem; }
 }
 
-
-
-/* ===== Header actions: normalize button heights ===== */
-.fs-header .fs-actions .fs-btn,
-.fs-header .fs-actions .fs-btn-primary,
-.fs-header .fs-actions #themeToggle{
-  height: 44px;
-  min-height: 44px;
-  line-height: 44px;
-  padding-top: 0;
-  padding-bottom: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.fs-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
 }
 
-.fs-header .fs-actions .fs-btn-icon__svg{
-  line-height: 0;
-}
-
-@media (max-width: 768px){
-  .fs-header .fs-actions .fs-btn,
-  .fs-header .fs-actions .fs-btn-primary,
-  .fs-header .fs-actions #themeToggle{
-    height: 42px;
-    min-height: 42px;
-    line-height: 42px;
-  }
-}
-
-
-/* ===== Home hero: divider lines drawn as overlays (no visual "gap") ===== */
-body.home-template .fs-home-hero{
-  margin-top: 0 !important;
-  border: none !important;
-  /* draw top + bottom dividers as inset shadows so the image touches the header */
-  box-shadow:
-    inset 0 2px 0 rgba(255,255,255,0.14),
-    inset 0 -2px 0 rgba(255,255,255,0.14);
-}
-
-
-/* ===== Layout: move top spacing from main container to breadcrumbs ===== */
-.fs-main{
-  padding-top: 0 !important; /* removes the gap before the publication cover on home */
-}
-
-/* Breadcrumbs should not add layout spacing; grid controls vertical rhythm */
-.fs-breadcrumbs{
-  padding-top: 0;
-}
-
-/* Add the breathing room at the grid level so sidebar aligns cleanly */
-body:not(.home-template) .fs-grid{
+body:not(.home-template) .fs-grid {
   padding-top: 3rem;
 }
 
-@media (max-width: 768px){
-  body:not(.home-template) .fs-grid{ padding-top: 2rem; }
+@media (max-width: 768px) {
+  body:not(.home-template) .fs-grid { padding-top: 2rem; }
 }
 
-
-
-
-
-
-/* ===== Home hero overlay logo: larger presence while staying contained ===== */
-.fs-home-hero__logo{
-  padding: 0 1rem;
-  margin: 10px 0; /* less vertical waste so the logo can be larger */
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .fs-grid {
+    box-sizing: border-box;
+    gap: var(--fs-grid-gap);
+    grid-template-columns: minmax(0, 1fr) var(--fs-sidebar-width);
+    align-items: start;
+  }
+  .fs-grid > aside {
+    width: var(--fs-sidebar-width);
+    max-width: var(--fs-sidebar-width);
+    min-width: var(--fs-sidebar-width);
+  }
+  .fs-grid > article { min-width: 0; }
 }
 
-.fs-home-hero__logo img{
-  max-width: min(920px, 92vw);
-  /* occupy more of the available overlay height */
-  max-height: 92%;
-}
-
-@media (max-width: 768px){
-  .fs-home-hero__logo{ margin: 8px 0; }
-  .fs-home-hero__logo img{
-    max-width: min(520px, 92vw);
-    max-height: 92%;
+@media (min-width: 1200px) {
+  .fs-grid {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: var(--fs-shell-max);
+    margin-inline: auto;
+    gap: var(--fs-grid-gap);
+    grid-template-columns:
+      minmax(0, calc(100% - var(--fs-sidebar-width) - var(--fs-grid-gap)))
+      var(--fs-sidebar-width);
+    align-items: start;
+  }
+  .fs-grid > article { min-width: 0; }
+  .fs-grid > aside {
+    width: var(--fs-sidebar-width);
+    max-width: var(--fs-sidebar-width);
+    min-width: var(--fs-sidebar-width);
+    justify-self: end;
+    align-self: start;
   }
 }
 
-
-/* ===== Home featured rail: placed under publication cover (no overlap) ===== */
-body.home-template .fs-featured-rail-shell{
-  transform: none !important;
-  margin-top: 1rem;
-  margin-bottom: 1.25rem;
-  position: relative;
-  z-index: 1;
+.fs-grid > article,
+.fs-grid > aside {
+  min-width: 0;
 }
 
-/* ===== Home hero overlay logo (theme setting: home_hero_logo) ===== */
-.fs-home-hero{ position: relative; }
-
-.fs-home-hero__logo{
-  position: absolute;
-  inset: 0; /* stay inside publication image */
-  z-index: 20;
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-
-.fs-home-hero__logo img{
+.fs-content-card {
+  width: 100%;
   display: block;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  max-width: min(980px, 90vw);
-  max-height: 82%;
-  filter: drop-shadow(0 12px 26px rgba(0,0,0,.45));
+  overflow: hidden;
+  position: relative;
+  isolation: isolate;
 }
-@media (max-width: 768px){
-  .fs-home-hero__logo img{
-    max-width: min(560px, 92vw);
-    max-height: 80%;
+
+.post-template .fs-content-card,
+.page-template .fs-content-card {
+  overflow: visible;
+  border-color: var(--pu-card-border) !important;
+}
+
+.fs-content-wrap {
+  padding: 0;
+}
+
+@media (min-width: 1024px) {
+  .fs-content-wrap {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
+/* sidebar overflow guard */
+.site-sidebar,
+.fs-sidebar,
+.site-sidebar * {
+  box-sizing: border-box;
+}
 
+.site-sidebar {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
 
-/* ===== Header actions: uniform 35px controls ===== */
-.fs-header-actions .fs-btn,
-.fs-header-actions button.fs-btn,
-.fs-header-actions a.fs-btn{
-  height: 35px;
-  line-height: 35px;
-  padding-top: 0;
-  padding-bottom: 0;
-  display: inline-flex;
-  align-items: center;
+.site-sidebar .fs-card,
+.site-sidebar .sidebar-section,
+.site-sidebar .sidebar-cta {
+  width: 100%;
+  max-width: 100%;
+}
+
+.site-sidebar img,
+.site-sidebar svg {
+  max-width: 100%;
 }
 
 
-
-/* ===== Home hero overlay logo: bigger (v2) ===== */
-.fs-home-hero__logo img{
-  max-width: min(1600px, 96vw);
-  max-height: 100%;
+/* ============================================================
+   7. Home hero
+   ============================================================ */
+.fs-home-hero {
+  position: relative;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  border-radius: 0;
+  overflow: hidden;
+  min-height: 340px;
+  z-index: 5;
+  border-top: 1px solid rgba(255,255,255,.18);
+  border-bottom: 1px solid rgba(255,255,255,.18);
 }
-@media (max-width: 768px){
-  .fs-home-hero__logo img{
-    max-width: min(960px, 96vw);
-    max-height: 98%;
+
+body.home-template .fs-home-hero {
+  margin-top: 0 !important;
+}
+
+@supports (width: 100dvw) {
+  .fs-home-hero {
+    width: 100dvw;
+    margin-left: calc(50% - 50dvw);
+    margin-right: calc(50% - 50dvw);
   }
 }
 
-
-
-/* ===== Mobile fixes: full-bleed publication cover, visible hero logo, no horizontal stretch ===== */
-
-/* Prevent any accidental horizontal scroll on small screens */
-@media (max-width: 768px){
-  html, body{ overflow-x: hidden; }
+@supports (width: 100svw) {
+  .fs-home-hero {
+    width: 100svw;
+    margin-left: calc(50% - 50svw);
+    margin-right: calc(50% - 50svw);
+  }
 }
 
-/* Full-bleed home publication cover on mobile */
-@media (max-width: 768px){
-  body.home-template .fs-home-hero{
+@media (max-width: 768px) {
+  body.home-template .fs-home-hero {
     width: 100%;
     margin-left: 0;
     margin-right: 0;
     border-radius: 0;
   }
-  body.home-template .fs-home-hero__inner{
+}
+
+.fs-home-hero__bg {
+  position: absolute;
+  inset: 0;
+  background-image: var(--fs-hero-bg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.02);
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+.fs-home-hero__inner {
+  position: relative;
+  z-index: 2;
+  max-width: var(--fs-shell-max, 1200px);
+  margin: 0 auto;
+  padding: 2rem 1.25rem;
+}
+
+@media (max-width: 768px) {
+  body.home-template .fs-home-hero__inner {
     padding: 1.25rem 0;
   }
 }
 
-/* Ensure the hero overlay logo is ALWAYS positioned and visible */
-body.home-template .fs-home-hero{ position: relative; overflow: hidden; }
-
-body.home-template .fs-home-hero__logo{
+/* overlay logo (theme setting: home_hero_logo) */
+body.home-template .fs-home-hero__logo {
   position: absolute !important;
   inset: 0 !important;
   z-index: 25 !important;
@@ -2584,565 +712,727 @@ body.home-template .fs-home-hero__logo{
   margin: 0 !important;
 }
 
-body.home-template .fs-home-hero__logo img{
+body.home-template .fs-home-hero__logo img {
   display: block;
   width: auto;
   height: auto;
   object-fit: contain;
   max-width: min(1400px, 96vw);
   max-height: 86%;
+  filter: drop-shadow(0 12px 26px rgba(0,0,0,.45));
 }
 
-/* Keep rail and main content constrained to the viewport on mobile */
-@media (max-width: 768px){
-  .fs-featured-rail{
+@media (max-width: 768px) {
+  body.home-template .fs-home-hero__logo img {
+    max-width: min(960px, 96vw);
+    max-height: 98%;
+  }
+}
+
+
+/* ============================================================
+   8. Featured rail
+   ============================================================ */
+.fs-featured-rail-shell {
+  position: relative;
+  margin-top: 0;
+  transform: none;
+  z-index: 50;
+}
+
+body.home-template .fs-featured-rail-shell {
+  transform: none !important;
+  margin-top: 1rem;
+  margin-bottom: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.fs-featured-rail {
+  margin: 0 auto;
+  max-width: var(--fs-shell-max, 1200px);
+  padding: 1rem 0;
+}
+
+@media (max-width: 768px) {
+  .fs-featured-rail {
     max-width: calc(100vw - 2rem);
   }
-  .fs-featured-rail__track{
-    /* prevent the grid from forcing wider-than-viewport layouts */
-    grid-auto-columns: minmax(220px, 78vw);
+}
+
+.fs-featured-rail__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: .75rem;
+}
+
+.fs-featured-rail__title {
+  margin: 0;
+  font-size: 1.05rem;
+  letter-spacing: .02em;
+}
+
+.fs-featured-rail__track {
+  --fs-rail-gap: 22px;
+  --fs-rail-cols: 4;
+  display: flex;
+  gap: var(--fs-rail-gap);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  padding-block: 1.25rem;
+  padding-bottom: 6px;
+  scrollbar-width: none;
+}
+
+.fs-featured-rail__track::-webkit-scrollbar { display: none; }
+
+.fs-featured-rail__track .fs-rail-card {
+  scroll-snap-align: start;
+  min-width: 0;
+  flex: 0 0 calc(
+    (100% - (var(--fs-rail-gap) * (var(--fs-rail-cols) - 1))) / var(--fs-rail-cols) + 2px
+  );
+}
+
+@media (max-width: 1100px) { .fs-featured-rail__track { --fs-rail-cols: 3; } }
+@media (max-width: 780px)  { .fs-featured-rail__track { --fs-rail-cols: 2; } }
+
+
+/* mobile: switch from horizontal scroll to single-column stack */
+@media (max-width: 600px) {
+  .fs-featured-rail__track {
+    flex-direction: column;
+    overflow-x: visible;
+    scroll-snap-type: none;
+    gap: 1rem;
+    padding-bottom: 0;
   }
-  .fs-grid,
-  .fs-feed,
-  .post-feed,
-  .site-sidebar{
-    max-width: 100%;
+  .fs-featured-rail__track .fs-rail-card {
+    flex: 1 1 100%;
+    min-width: 0;
   }
 }
 
-
-
-/* =========================================================
-   0.37.8 Update - Sidebar radius fix + Header sizing polish
-   ========================================================= */
-
-:root {
-  --pu-radius: .9rem;
-  --pu-accent: #ff8a00;
-  --pu-accent-soft: rgba(255, 138, 0, 0.16);
-  --pu-accent-softer: rgba(255, 138, 0, 0.10);
-  /* Accent borders: subtle tint (not vibrant). */
-  --pu-card-border: color-mix(in srgb, var(--accent) 22%, var(--surface) 78%);
-  --pu-card-border-hover: color-mix(in srgb, var(--accent) 35%, var(--surface) 65%);
+.fs-rail-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0;
+  border: none;
+  overflow: hidden;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
-/* Home feed thumbnails (post-row): use the same accent-tinted border as sidebar cards */
-body.home-template .fs-postrow .thumb{
-  border: 1px solid var(--pu-card-border) !important;
+.fs-rail-card__hit {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
 }
-body.home-template .fs-postrow:hover .thumb{
+
+.fs-rail-card__image {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 .6rem 0;
+  border-radius: .9rem;
+  overflow: hidden;
+  border: 1px solid var(--pu-card-border);
+  height: 150px;
+}
+
+.fs-rail-card__image:hover {
   border-color: var(--pu-card-border-hover) !important;
 }
 
-/* Sidebar cards: match featured image rounding + subtle accent border
-   NOTE: .fs-card default radius is .25rem, so we override specifically here. */
+.fs-rail-card__image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fs-rail-card__title {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 950;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.fs-rail-card__excerpt {
+  position: relative;
+  z-index: 1;
+  margin: .45rem 0 0;
+  color: var(--subtext);
+  font-weight: 700;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
+/* ============================================================
+   9. Post feed (horizontal rows)
+   ============================================================ */
+.fs-feed-horizontal {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.fs-postrow {
+  background: transparent !important;
+  border-bottom: none !important;
+  position: relative;
+  padding-bottom: 2rem !important;
+}
+
+.fs-postrow::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1rem !important;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,.26), transparent) !important;
+}
+
+/* hide divider dot (::before kept as rule but invisible) */
+.fs-postrow::before {
+  display: none !important;
+}
+
+.fs-feed-horizontal .fs-postrow:last-child::after,
+.fs-feed-horizontal .fs-postrow:last-child::before {
+  display: none;
+}
+
+@media (max-width: 520px) {
+  .fs-postrow { padding-bottom: 1.6rem !important; }
+  .fs-postrow::after { bottom: .8rem !important; }
+}
+
+.fs-postrow-inner {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  position: relative;
+  border-radius: 1rem;
+  padding-top: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-bottom: 1.25rem !important;
+  border-bottom: none !important;
+}
+
+.fs-row-hit {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  text-decoration: none;
+}
+.fs-row-hit:hover { text-decoration: none; }
+
+.fs-postrow .thumb {
+  flex: 0 0 140px;
+  width: 140px;
+  height: 92px;
+  border-radius: .9rem;
+  border: 1px solid var(--pu-card-border) !important;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.fs-postrow:hover .thumb {
+  border-color: var(--pu-card-border-hover) !important;
+}
+
+.fs-postrow .thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.thumb-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  z-index: 11;
+}
+
+.fs-row-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  position: relative;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.fs-row-title {
+  margin: 0;
+  padding: 0;
+  line-height: 1.15;
+  position: relative;
+  z-index: 2;
+}
+
+.fs-excerpt {
+  margin: .45rem 0 0;
+  color: var(--subtext);
+  font-weight: 700;
+  cursor: default;
+  text-decoration: none;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+.fs-postrow .meta {
+  margin-top: .75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  align-items: center;
+  color: var(--accent);
+  font-size: .8rem;
+  font-weight: 900;
+  position: relative;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.fs-postrow .meta a {
+  color: var(--accent2);
+  text-decoration: none;
+  pointer-events: auto;
+}
+.fs-postrow .meta a:hover { text-decoration: underline; }
+
+.fs-tagline {
+  margin-top: .55rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  pointer-events: auto;
+  position: relative;
+  z-index: 11;
+}
+
+.fs-tagline-bottom { margin-top: .75rem; }
+
+.fs-tagline .fs-pill {
+  font-size: .72rem;
+  padding: .4rem .7rem;
+}
+
+.fs-pill,
+.fs-tagline a {
+  pointer-events: auto;
+  position: relative;
+  z-index: 11;
+}
+
+/* mobile: stack thumb above content */
+@media (max-width: 520px) {
+  .fs-postrow-inner {
+    flex-direction: column;
+  }
+  .fs-postrow .thumb {
+    width: 100%;
+    height: 160px;
+    flex: none;
+  }
+  .fs-row-content { padding: 1.25rem; }
+}
+
+/* tag page: force single-column feed */
+.tag-template .fs-feed-horizontal {
+  width: 100%;
+}
+.fs-tag-template .fs-postrow,
+.tag-template .fs-postrow {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+
+/* ============================================================
+   10. Sidebar
+   ============================================================ */
+.site-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.sidebar-section { padding: 1rem; }
+
+.sidebar-title { margin: 0 0 .5rem 0; }
+
+/* sidebar card border */
 .site-sidebar .sidebar-section.fs-card {
   border-radius: var(--pu-radius) !important;
   border: 1px solid var(--pu-card-border) !important;
-  overflow: hidden; /* ensures inner content respects rounding */
+  overflow: hidden;
 }
 .site-sidebar .sidebar-section.fs-card:hover {
   border-color: var(--pu-card-border-hover) !important;
 }
 
-/* Header: make nav feel "primary" and actions feel tighter/cleaner */
-.fs-nav a {
-  font-size: 1rem;
-  letter-spacing: -0.01em;
+/* social icons */
+.sidebar-social {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: .5rem;
+  justify-content: start;
 }
 
-/* Tighten action buttons so they don't bully the nav */
-.fs-actions { gap: .4rem; }
+.sidebar-social .social-icon {
+  width: 40px;
+  height: 40px;
+  justify-self: start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--muted);
+  border-radius: .75rem;
+  text-decoration: none;
+  color: var(--pop);
+}
+.sidebar-social .social-icon:hover { border-color: var(--pop); }
+.sidebar-social svg { width: 18px; height: 18px; fill: currentColor; }
 
-.fs-btn {
-  padding: .42rem .62rem;
-  font-size: .85rem;
-  line-height: 1;
+/* latest posts list */
+.sidebar-post-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .9rem;
 }
 
-/* Search + icon buttons: keep label aligned and not oversized */
-.fs-btn-icon {
+.sidebar-post {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  cursor: pointer;
+}
+
+.sidebar-post-link {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  border-radius: .75rem;
+}
+
+.sidebar-post-title {
+  font-weight: 600;
+  color: var(--pop);
+  text-decoration: none;
+  position: relative;
+  z-index: 5;
+}
+
+.sidebar-excerpt {
+  margin: 0;
+  position: relative;
+  z-index: 5;
+  text-decoration: none;
+}
+
+.sidebar-meta {
+  font-size: .75rem;
+  line-height: 1.2;
+  position: relative;
+  z-index: 5;
+  text-decoration: none;
+}
+
+.sidebar-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  margin-top: .15rem;
+  position: relative;
+  z-index: 7;
+}
+
+.sidebar-tags a {
   display: inline-flex;
   align-items: center;
-  gap: .45rem;
+  padding: .15rem .5rem;
+  border-radius: 999px;
+  border: 1px solid var(--pop);
+  color: var(--pop);
+  text-decoration: none;
+  font-size: .7rem;
+  line-height: 1;
+  position: relative;
+  z-index: 7;
 }
-.fs-btn-icon__label {
-  font-size: .85rem;
-}
+.sidebar-tags a:hover { filter: brightness(1.05); }
 
-/* Primary button: same height/feel as the rest */
-.fs-btn-primary {
-  padding: .42rem .72rem;
-}
-
-/* Optional: slightly reduce header vertical padding to match tighter controls */
-.fs-header-inner {
-  padding: .65rem 0;
-}
-
-
-/* =========================================================
-   0.37.9 Update - Hero to Featured Bridge
-   ========================================================= */
-
-.hero-bridge {
-  margin: 3rem 0 2rem;
-  display: flex;
-  justify-content: center;
-}
-
-.hero-bridge-inner {
-  display: flex;
-  align-items: center;
-  gap: .75rem;
-  font-size: .8rem;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  opacity: .6;
-}
-
-.bridge-line {
-  height: 1px;
-  width: 80px;
-  background: linear-gradient(to right, transparent, rgba(255,255,255,.3), transparent);
-}
-
-.bridge-word {
-  font-weight: 600;
-}
-
-.bridge-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 99px;
-  background: var(--pu-accent, #ff8a00);
+.sidebar-divider {
+  border: 0;
+  border-top: 1px solid var(--muted);
+  margin: .9rem 0;
   opacity: .8;
 }
 
-
-/* =========================================================
-   0.37.10 Update - Bridge between Featured and Feed
-   ========================================================= */
-
-.section-bridge {
-  margin: 2.2rem 0 1.6rem;
-  display: flex;
-  justify-content: center;
+.sidebar-readmore {
+  margin-left: .25rem;
+  color: var(--pop);
+  font-weight: 600;
+  white-space: nowrap;
 }
 
+.sidebar-post:hover .sidebar-post-title { color: inherit; }
+.sidebar-post a { text-decoration: none; }
 
-/* =========================================================
-   0.37.11 Update - Field Notes section bridges (render fix)
-   ========================================================= */
+/* related posts */
+.sidebar-related { /* container — no decoration needed */ }
 
-.fs-section-bridge {
-  margin: 2.75rem 0 2rem;
-  display: flex;
-  justify-content: center;
+.sidebar-title-tag {
+  opacity: .9;
+  font-weight: 900;
+  margin-left: .35rem;
 }
 
-.fs-section-bridge__inner {
-  display: flex;
-  align-items: center;
-  gap: .75rem;
-  font-size: .8rem;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  opacity: .6;
-}
-
-.fs-bridge-line {
-  height: 1px;
-  width: 90px;
-  background: linear-gradient(to right, transparent, rgba(255,255,255,.28), transparent);
-}
-
-.fs-bridge-word { font-weight: 600; }
-
-.fs-bridge-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: var(--pu-accent, #ff8a00);
-  opacity: .85;
-}
-
-/* Slightly tighter bridge after featured rail */
-.fs-featured-rail-shell + .fs-section-bridge {
-  margin-top: 2.1rem;
-  margin-bottom: 1.6rem;
-}
-
-/* Mobile: keep it from feeling cramped */
-@media (max-width: 520px) {
-  .fs-bridge-line { width: 54px; }
-  .fs-section-bridge__inner { font-size: .75rem; }
-}
-
-
-/* =========================================================
-   0.37.12 Update - Bridge typography + ensure 2nd bridge renders
-   ========================================================= */
-
-/* Make bridge text a touch larger and more readable */
-.fs-section-bridge__inner {
-  font-size: .85rem;
-  opacity: .78;
-  color: rgba(255,255,255,.78);
-}
-
-/* Slightly longer lines for better "chapter break" feel */
-.fs-bridge-line {
-  width: 110px;
-  background: linear-gradient(to right, transparent, rgba(255,255,255,.34), transparent);
-}
-
-/* Between featured rail and feed: slightly tighter */
-.fs-section-bridge--between {
-  margin: 2.1rem 0 1.4rem;
-}
-
-/* Mobile: keep proportions sane */
-@media (max-width: 520px) {
-  .fs-bridge-line { width: 64px; }
-  .fs-section-bridge__inner { font-size: .78rem; letter-spacing: .16em; }
-}
-
-
-/* =========================================================
-   0.37.13 Update - Longer responsive bridge lines
-   ========================================================= */
-
-/* Make the bridge lines longer on desktop, but responsive on mobile */
-.fs-bridge-line {
-  width: clamp(58px, 14vw, 190px);
-}
-
-/* Between sections: give a bit more runway */
-.fs-section-bridge__inner {
-  gap: .85rem;
-}
-
-
-/* =========================================================
-   0.37.15 Hotfix - Restore featured rail + deterministic bridges + hero bottom border
-   ========================================================= */
-
-/* HERO: match top/bottom framing and nudge height slightly */
-.fs-home-hero{
-  border-top: 1px solid rgba(255,255,255,.18);
-  border-bottom: 1px solid rgba(255,255,255,.18);
-  min-height: 340px; /* was 330px */
-}
-
-/* Bridge typography + responsive lines */
-.fs-section-bridge{
-  margin: 2.75rem 0 2rem;
-  display:flex;
-  justify-content:center;
-}
-.fs-section-bridge--between{
-  margin: 2.1rem 0 1.4rem;
-}
-.fs-section-bridge__inner{
-  display:flex;
-  align-items:center;
-  gap: .85rem;
-  font-size: .85rem;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  opacity: .82;
-  color: rgba(255,255,255,.78);
-}
-.fs-bridge-line{
-  height:1px;
-  width: clamp(58px, 14vw, 190px);
-  background: linear-gradient(to right, transparent, rgba(255,255,255,.34), transparent);
-}
-.fs-bridge-word{ font-weight: 600; }
-.fs-bridge-dot{
-  width:6px;
-  height:6px;
-  border-radius:999px;
-  background: var(--pu-accent, #ff8a00);
-  opacity:.85;
-}
-
-@media (max-width: 520px){
-  .fs-section-bridge__inner{ font-size: .78rem; letter-spacing: .16em; }
-}
-
-
-/* =========================================================
-   0.37.16 Update - Second bridge: lines + dot only
-   ========================================================= */
-
-.fs-section-bridge--between .fs-section-bridge__inner{
-  gap: .7rem;
-  letter-spacing: 0; /* no text, no need for spacing */
-  text-transform: none;
-}
-
-/* =========================================================
-   0.50.14 Update - Post: feature-image-to-body bridge
-   ========================================================= */
-
-.post-template .fs-section-bridge--post{
-  margin-top: 1.25rem;
-  margin-bottom: 0;
-}
-
-.post-template .fs-section-bridge--post .fs-section-bridge__inner{
-  padding: .15rem 0;
-}
-
-@media (max-width: 700px){
-  .post-template .fs-section-bridge--post{
-    margin-top: 1rem;
-  }
-}
-
-
-/* =========================================================
-   0.37.17 Update - fs-postrow-inner padding (bottom only)
-   ========================================================= */
-
-.fs-postrow-inner{
-  padding-top: 0 !important;
+.sidebar-related-list {
+  list-style: none !important;
   padding-left: 0 !important;
-  padding-right: 0 !important;
-  padding-bottom: 1.25rem !important;
-}
-
-
-/* =========================================================
-   0.37.18 Update - Remove post-row bottom borders; move spacing to bridge
-   Goal: avoid "squished" feel against the next section divider
-   ========================================================= */
-
-/* 1) Kill the bottom rule on each post row (we'll use the bridge instead) */
-.fs-postrow{
-  border-bottom: none !important;
-}
-
-/* Some themes apply the rule on the inner element */
-.fs-postrow-inner{
-  border-bottom: none !important;
-}
-
-/* 2) Make the between-section bridge carry the breathing room */
-.fs-section-bridge--between{
-  padding-bottom: 1.25rem;   /* spacing after the divider */
-  margin-bottom: 0;          /* let padding do the work */
-}
-
-/* 3) Tighten the visual divider slightly so it doesn't look "too tall" */
-.fs-section-bridge--between .fs-section-bridge__inner{
-  padding: .15rem 0;
-}
-
-
-/* =========================================================
-   0.37.20 Update - Post-to-post separator (line • dot • line)
-   Undo: revert 0.37.19 and implement divider BETWEEN POSTS instead
-   ========================================================= */
-
-/* Remove old bottom borders (keep) */
-.fs-postrow,
-.fs-postrow-inner{
-  border-bottom: none !important;
-}
-
-/* Add breathing room + divider between post rows */
-.fs-postrow{
-  position: relative;
-  padding-bottom: 1.5rem; /* spacing AFTER the divider */
-}
-
-/* The line */
-.fs-postrow::after{
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: .75rem;          /* divider sits above the extra padding */
-  height: 1px;
-  background: linear-gradient(
-    to right,
-    transparent,
-    rgba(255,255,255,.26),
-    transparent
-  );
-}
-
-/* The dot */
-.fs-postrow::before{
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: .75rem;
-  width: 6px;
-  height: 6px;
-  transform: translate(-50%, 50%);
-  border-radius: 999px;
-  background: var(--pu-accent, #ff8a00);
-  opacity: .85;
-  box-shadow: 0 0 0 2px rgba(255,138,0,.14);
-}
-
-/* Don't show divider after the last post */
-.fs-feed-horizontal .fs-postrow:last-child::after,
-.fs-feed-horizontal .fs-postrow:last-child::before{
-  display: none;
-}
-
-/* Mobile: keep it from feeling cramped */
-@media (max-width: 520px){
-  .fs-postrow{ padding-bottom: 1.25rem; }
-  .fs-postrow::after{ bottom: .62rem; }
-  .fs-postrow::before{ bottom: .62rem; }
-}
-
-
-/* =========================================================
-   0.37.21 Update - Featured rail meta/tags match main feed formatting
-   ========================================================= */
-
-/* Featured rail: use the same meta + pill styles as post rows,
-   but tweak layout so it fits in the tighter rail card */
-.fs-rail-card .meta{
-  margin-top: .85rem;
-  justify-content: flex-start;
+  margin-left: 0 !important;
+  margin-top: .75rem;
+  display: grid;
   gap: .75rem;
-  color: var(--pu-accent, #ff8a00);
 }
 
-/* Ensure pills in rail don't look oversized */
-.fs-rail-card .fs-pill{
-  margin-top: .25rem;
+.sidebar-related-item { margin: 0; }
+
+.sidebar-related-link {
+  display: block;
+  font-weight: 900;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
 }
 
-
-/* =========================================================
-   0.37.22 Update - Increase spacing between post rows
-   (adjust the post-to-post separator padding)
-   ========================================================= */
-
-/* More breathing room between posts */
-.fs-postrow{
-  padding-bottom: 2rem !important;
+.sidebar-related-meta {
+  margin-top: .35rem;
+  font-size: .82rem;
+  opacity: .85;
+  display: flex;
+  gap: .4rem;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
-/* Keep divider positioned nicely within the new spacing */
-.fs-postrow::after{ bottom: 1rem !important; }
-.fs-postrow::before{ bottom: 1rem !important; }
-
-@media (max-width: 520px){
-  .fs-postrow{ padding-bottom: 1.6rem !important; }
-  .fs-postrow::after{ bottom: .8rem !important; }
-  .fs-postrow::before{ bottom: .8rem !important; }
+.sidebar-related-author,
+.sidebar-related-read,
+.sidebar-related-meta time {
+  font-weight: 700;
 }
 
+.sidebar-related-sep { opacity: .6; }
 
-/* =========================================================
-   0.37.23 Update - Match featured meta typography to feed + remove post divider dot
-   ========================================================= */
-
-/* 1) Featured rail meta: match feed meta typography (do NOT override font-size/weight) */
-.fs-rail-card .meta,
-.fs-rail-card .meta-item{
-  font-size: inherit;
-  font-weight: inherit;
-  letter-spacing: inherit;
-  text-transform: inherit;
+.sidebar-related-hr {
+  border: 0;
+  border-top: 1px solid rgba(255,255,255,.12);
+  margin: .25rem 0 0;
 }
 
-/* If the rail card previously forced meta to accent color, revert to normal meta color
-   (the feed meta style will apply consistently) */
-.fs-rail-card .meta{
-  color: inherit;
+.sidebar-related-item:hover .sidebar-related-link {
+  color: var(--accent);
+  text-decoration: underline;
 }
 
-/* 2) Remove the dot from the per-post separator (keep the line divider + spacing) */
-.fs-postrow::before{
-  display: none !important;
+/* CTA */
+.sidebar-cta {
+  border: 1px solid var(--muted);
+}
+.sidebar-cta .fs-card {
+  border: none;
+  box-shadow: none;
 }
 
-/* Ensure the divider line stays centered visually without the dot */
-.fs-postrow::after{
-  background: linear-gradient(
-    to right,
-    transparent,
-    rgba(255,255,255,.26),
-    transparent
-  ) !important;
+.sidebar-cta-subtext {
+  margin: 0;
+  color: rgba(255,255,255,.72);
 }
 
+.sidebar-cta-button {
+  margin-top: .6rem;
+  width: 100%;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--pop);
+  color: #0b0f12;
+  border: 1px solid var(--pop);
+  border-radius: .9rem;
+  text-decoration: none;
+  font-weight: 600;
+}
+.sidebar-cta-button:hover { filter: brightness(1.05); }
 
-/* =========================================================
-   0.37.24 Update - Force featured rail meta to match feed meta exactly
-   ========================================================= */
 
-/* The rail had overrides that changed alignment + color.
-   This resets featured meta to the same look as the page post meta. */
-.fs-rail-card .meta{
-  margin-top: 1rem !important;
-  justify-content: space-between !important;
-  gap: 0 !important;
-  color: var(--subtext) !important;
-  font-size: .8rem !important;
-  font-weight: 800 !important;
+/* ============================================================
+   11. Post / page content
+   ============================================================ */
+.fs-post-header { /* structural wrapper — no decoration */ }
+
+.fs-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  align-items: center;
+  margin: 0 0 1rem;
+  padding-top: 0;
+  font-weight: 900;
+  font-size: .85rem;
+}
+.fs-breadcrumbs .fs-crumb {
+  color: var(--accent);
+  text-decoration: none;
+}
+.fs-breadcrumbs .fs-crumb:hover { text-decoration: underline; }
+.fs-breadcrumbs .fs-crumb-current { color: var(--accent); opacity: .9; }
+.fs-breadcrumbs .fs-crumb-sep { color: var(--accent); opacity: .55; }
+
+/* feature image */
+.fs-post-feature {
+  display: block;
+  width: 100%;
+  max-height: 200px;
+  margin: 1.25rem 0;
+  padding: 0 !important;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid var(--pu-card-border);
 }
 
-.fs-rail-card .meta-item{
-  display: inline-flex !important;
-  align-items: center !important;
+.fs-post-feature img {
+  display: block;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: calc(1.25rem - 1px);
 }
 
-
-/* =========================================================
-   0.37.25 Update - Use theme accent for borders/dots + remove fs-card shadow
-   ========================================================= */
-
-/* 1) Map our accent usage to the theme accent so it updates automatically */
-:root{
-  --pu-accent: var(--accent);
+.fs-image-attrib {
+  font-size: .8rem;
+  color: var(--subtext);
+  margin-top: .4rem;
 }
 
-/* Sidebar accent border should follow --accent */
+/* gh-content prose */
+.gh-content p {
+  margin: 0 0 1.25rem 0;
+  line-height: 1.75;
+}
+.gh-content p:last-child { margin-bottom: 0; }
 
-/* Bridges + separators should also follow --accent */
-.fs-bridge-dot{
-  background: var(--accent) !important;
+.gh-content h1 { font-size: 2rem;   font-weight: 950; }
+.gh-content h2 { font-size: 1.5rem; font-weight: 900; }
+.gh-content h3 { font-size: 1.2rem; font-weight: 900; }
+.gh-content h4 { font-size: 1rem;   font-weight: 800; }
+.gh-content h5 { font-size: .9rem;  font-weight: 800; }
+.gh-content h6 { font-size: .85rem; font-weight: 800; }
+
+.gh-content h1, .gh-content h2, .gh-content h3,
+.gh-content h4, .gh-content h5, .gh-content h6 {
+  margin: 2rem 0 .75rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+.gh-content h1:first-child,
+.gh-content h2:first-child { margin-top: 0; }
+
+.gh-content ul, .gh-content ol {
+  margin: 0 0 1.25rem 1.5rem;
+  padding: 0;
+}
+.gh-content li { margin-bottom: .35rem; line-height: 1.7; }
+
+.gh-content blockquote {
+  border-left: 4px solid var(--accent);
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+  color: var(--subtext);
+}
+.gh-content img {
+  max-width: 100%;
+  border-radius: 1rem;
+  border: 1px solid var(--muted);
 }
 
-.fs-postrow::before{
-  background: var(--accent) !important;
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 18%, transparent) !important;
+.post-template .gh-content,
+.page-template .gh-content {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
-/* 2) Remove fs-card box shadow entirely */
-.fs-card{
-  box-shadow: none !important;
+.post-template .gh-content > *,
+.page-template .gh-content > * {
+  max-width: 100%;
+  min-width: 0;
 }
 
-
-/* =========================================================
-   0.37.26 Update - Featured meta uses accent + remove author from all meta
-   ========================================================= */
-
-/* Featured rail meta: keep the same typography/alignment as feed meta,
-   but use accent color as requested. */
-.fs-rail-card .meta{
-  color: var(--accent) !important;
+.post-template .gh-content pre,
+.page-template .gh-content pre,
+.post-template .gh-content table,
+.page-template .gh-content table {
+  max-width: 100%;
+  overflow-x: auto;
 }
 
+.post-template .gh-content table,
+.page-template .gh-content table {
+  display: block;
+}
 
-/* =========================================================
-   0.37.27 Update - Page/Post header order + Tag pills + Author card
-   ========================================================= */
+.gh-content > * { min-width: 0; }
 
-.fs-author-card{
+/* home intro */
+.fs-home-intro { margin-top: 0 !important; }
+.fs-home-intro-figure {
+  margin: 0 0 1.25rem 0;
+}
+.fs-home-intro-figure img {
+  width: 100%;
+  height: auto;
+  border-radius: 1.25rem;
+  border: 1px solid var(--muted);
+}
+.fs-home-intro-content { margin-top: 0; }
+
+
+/* ============================================================
+   12. Author card
+   ============================================================ */
+.fs-author-card {
   margin-top: 3rem;
   border-radius: var(--pu-radius, .9rem);
   border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
@@ -3150,7 +1440,7 @@ body.home-template .fs-postrow:hover .thumb{
   position: relative;
 }
 
-.fs-author-card__cover{
+.fs-author-card__cover {
   position: absolute;
   inset: 0;
   opacity: .18;
@@ -3159,23 +1449,31 @@ body.home-template .fs-postrow:hover .thumb{
   filter: saturate(0.9);
 }
 
-/* Post pages: brighten the author's cover image slightly */
-.post-template .fs-author-card__cover{
+.post-template .fs-author-card__cover {
   opacity: .26;
   filter: brightness(1.25) saturate(1.05) contrast(1.05);
 }
 
-.fs-author-card__inner{
+.fs-author-card__inner {
   position: relative;
   z-index: 1;
   display: flex;
   gap: 1rem;
   align-items: center;
-  padding: 1.25rem 1.25rem;
+  padding: 1.25rem;
   backdrop-filter: blur(2px);
 }
 
-.fs-author-card__photo{
+/* overlay link covers the whole card; social icons float above it */
+.fs-author-card__overlay-link {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.fs-author-card__pe-none { pointer-events: none; }
+
+.fs-author-card__photo {
   width: 54px;
   height: 54px;
   border-radius: 999px;
@@ -3184,40 +1482,13 @@ body.home-template .fs-postrow:hover .thumb{
   border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
 }
 
-.fs-author-card__photo img{
+.fs-author-card__photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.fs-author-card__name{
-  margin: 0;
-  font-size: 1rem;
-  letter-spacing: -0.01em;
-}
-
-.fs-author-card__bio{
-  margin: .25rem 0 0 0;
-  color: var(--subtext);
-  font-size: .9rem;
-  line-height: 1.5;
-}
-
-@media (max-width: 520px){
-  .fs-author-card__inner{
-    padding: 1rem;
-  }
-  .fs-author-card__bio{
-    font-size: .88rem;
-  }
-}
-
-
-/* =========================================================
-   0.37.28 Update - Add Author label above author name
-   ========================================================= */
-
-.fs-author-card__eyebrow{
+.fs-author-card__eyebrow {
   font-size: .7rem;
   letter-spacing: .14em;
   text-transform: uppercase;
@@ -3226,225 +1497,125 @@ body.home-template .fs-postrow:hover .thumb{
   opacity: .85;
 }
 
-/* =========================================================
-   0.50.20 Update - Author social icons + make post author card clickable
-   ========================================================= */
-
-/* Make the main author card area clickable on post pages */
-.fs-author-card__main{
-  text-decoration: none;
-  color: inherit;
+.fs-author-card__name {
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
 }
 
-.fs-author-card__main:hover{
-  filter: brightness(1.02);
+.fs-author-card__bio {
+  margin: .25rem 0 0 0;
+  color: var(--subtext);
+  font-size: .9rem;
+  line-height: 1.5;
 }
 
-.fs-author-socials{
+.fs-author-card__socials {
+  position: relative;
+  z-index: 3; /* above overlay link */
+}
+
+.fs-author-socials {
   margin-top: .75rem;
   display: flex;
   flex-wrap: wrap;
   gap: .55rem;
   padding: 0 1.25rem 1.25rem 1.25rem;
 }
+.fs-author-socials:empty { display: none; }
 
-.fs-author-socials:empty{ display:none; }
+/* author page: larger photo */
+.fs-author-card--profile .fs-author-card__photo {
+  width: 72px;
+  height: 72px;
+}
 
-.fs-social-icon{
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  display: inline-flex;
-  align-items: center;
+@media (max-width: 520px) {
+  .fs-author-card__inner { padding: 1rem; }
+  .fs-author-card__bio   { font-size: .88rem; }
+}
+
+
+/* ============================================================
+   13. Section bridges
+   ============================================================ */
+.fs-section-bridge {
+  margin: 2.75rem 0 2rem;
+  display: flex;
   justify-content: center;
-  text-decoration: none;
-  border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
-  background: color-mix(in srgb, var(--accent) 6%, transparent);
-  color: var(--subtext);
-  transition: transform .15s ease, border-color .15s ease, background-color .15s ease;
-  pointer-events: auto;
 }
 
-.fs-social-icon:hover{
-  transform: translateY(-1px);
-  border-color: color-mix(in srgb, var(--accent) 28%, transparent);
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
+.fs-section-bridge--between {
+  margin: 2.1rem 0 0;
+  padding-bottom: 1.25rem;
 }
 
-.fs-social-glyph{
-  font-weight: 950;
-  font-size: .9rem;
-  line-height: 1;
+.fs-section-bridge--between .fs-section-bridge__inner {
+  gap: .7rem;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: .15rem 0;
 }
 
-
-/* =========================================================
-   0.37.32 Update - Tag page related posts match home feed layout
-   ========================================================= */
-
-/* Ensure tag post list uses the same row rhythm as the home feed */
-.fs-tag-template .fs-feed-horizontal,
-.tag-template .fs-feed-horizontal{
-  width: 100%;
-}
-
-/* If tag page has a boxed container, keep it but ensure rows aren't cramped */
-.fs-tag-template .fs-postrow,
-.tag-template .fs-postrow{
-  margin-left: 0;
-  margin-right: 0;
-}
-
-
-/* =========================================================
-   0.37.33 Update - Tag page feed width fix
-   Cause: .fs-feed becomes 2-column grid on >=768px, shrinking the list container
-   ========================================================= */
-
-.tag-template .fs-feed{
-  grid-template-columns: 1fr !important;
-}
-
-
-/* =========================================================
-   0.37.34 Update - Footer redesign
-   ========================================================= */
-
-.fs-footer{
-  margin-top: 4rem;
-  padding: 3rem 0 2.5rem;
-  border-top: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
-  background: rgba(255,255,255,0.01);
-}
-
-.fs-footer-inner{
+.fs-section-bridge__inner {
   display: flex;
-  justify-content: space-between;
-  gap: 2rem;
+  align-items: center;
+  gap: .85rem;
+  font-size: .85rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  opacity: .82;
+  color: rgba(255,255,255,.78);
 }
 
-.fs-footer-brand{
-  margin: 0 0 1rem 0;
-  font-size: 1.1rem;
+.fs-bridge-line {
+  height: 1px;
+  width: clamp(58px, 14vw, 190px);
+  background: linear-gradient(to right, transparent, rgba(255,255,255,.34), transparent);
 }
 
-.fs-footer-nav ul{
-  list-style: none;
-  padding: 0;
-  margin: 0 0 1rem 0;
+.fs-bridge-word { font-weight: 600; }
+
+.fs-bridge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent) !important;
+  opacity: .85;
+}
+
+.fs-footer-bridge {
   display: flex;
-  gap: 1.25rem;
-  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 0 1.5rem 0;
 }
 
-.fs-footer-nav a{
-  color: var(--subtext);
-  text-decoration: none;
+.fs-footer-bridge .fs-section-bridge__inner {
+  justify-content: center;
 }
 
-.fs-footer-nav a:hover{
-  color: var(--accent);
+/* post: feature-image-to-body bridge */
+.post-template .fs-section-bridge--post {
+  margin-top: 1.25rem;
+  margin-bottom: 0;
+}
+.post-template .fs-section-bridge--post .fs-section-bridge__inner {
+  padding: .15rem 0;
 }
 
-.fs-footer-meta{
-  font-size: .85rem;
-  color: var(--subtext);
+@media (max-width: 700px) {
+  .post-template .fs-section-bridge--post { margin-top: 1rem; }
 }
 
-.fs-footer-signature{
-  font-size: .85rem;
-  color: var(--subtext);
-  text-align: right;
-}
-
-.fs-footer-bridge{
-  margin-bottom: 2.25rem;
-}
-
-@media (max-width: 768px){
-  .fs-footer-inner{
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .fs-footer-signature{
-    text-align: left;
-  }
+@media (max-width: 520px) {
+  .fs-section-bridge__inner { font-size: .78rem; letter-spacing: .16em; }
 }
 
 
-/* =========================================================
-   0.37.35 Update - Footer redesign applied in site-footer partial
-   ========================================================= */
-
-.fs-footer{
-  margin-top: 4rem;
-  padding: 3rem 0 2.5rem;
-  border-top: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
-  background: rgba(255,255,255,0.01);
-}
-
-.fs-footer-inner{
-  display: flex;
-  justify-content: space-between;
-  gap: 2rem;
-}
-
-.fs-footer-brand{
-  margin: 0 0 1rem 0;
-  font-size: 1.1rem;
-}
-
-.fs-footer-nav ul{
-  list-style: none;
-  padding: 0;
-  margin: 0 0 1rem 0;
-  display: flex;
-  gap: 1.25rem;
-  flex-wrap: wrap;
-}
-
-.fs-footer-nav a{
-  color: var(--subtext);
-  text-decoration: none;
-}
-
-.fs-footer-nav a:hover{
-  color: var(--accent);
-}
-
-.fs-footer-meta{
-  font-size: .85rem;
-  color: var(--subtext);
-}
-
-.fs-footer-signature{
-  font-size: .85rem;
-  color: var(--subtext);
-  text-align: right;
-}
-
-.fs-footer-bridge{
-  margin-bottom: 2.25rem;
-}
-
-@media (max-width: 768px){
-  .fs-footer-inner{
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .fs-footer-signature{
-    text-align: left;
-  }
-}
-
-
-/* =========================================================
-   0.50.2 Update - Post header order (breadcrumbs → meta → title)
-   ========================================================= */
-
-/* Footer: remove top border, remove top padding, remove background; keep bottom padding */
-.fs-footer{
+/* ============================================================
+   14. Footer
+   ============================================================ */
+.fs-footer {
   border-top: none !important;
   padding-top: 0 !important;
   padding-bottom: 2.5rem !important;
@@ -3452,57 +1623,199 @@ body.home-template .fs-postrow:hover .thumb{
   margin-top: 3rem;
 }
 
-/* Center the bridge */
-.fs-footer-bridge{
+.fs-footer-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
   display: flex;
-  justify-content: center;
-  margin: 0 0 1.5rem 0;
+  gap: 1.25rem;
+  flex-wrap: wrap;
 }
 
-/* Ensure bridge inner doesn't drift */
-.fs-footer-bridge .fs-section-bridge__inner{
-  justify-content: center;
+.fs-footer-nav a {
+  color: var(--subtext);
+  text-decoration: none;
 }
+.fs-footer-nav a:hover { color: var(--accent); }
 
-/* Center footer nav under bridge */
-.fs-footer-nav--center{
+.fs-footer-nav--center {
   display: flex;
   justify-content: center;
   margin: 0 0 1.75rem 0;
 }
+.fs-footer-nav--center ul { justify-content: center; }
 
-/* Make Ghost nav list center */
-.fs-footer-nav--center ul{
-  justify-content: center;
-}
-
-/* Bottom row: © left, signature right */
-.fs-footer-bottom{
+.fs-footer-bottom {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1.5rem;
 }
 
-@media (max-width: 768px){
-  .fs-footer-bottom{
+.fs-footer-meta {
+  font-size: .85rem;
+  color: var(--subtext);
+}
+
+.fs-footer-signature {
+  font-size: .85rem;
+  color: var(--subtext);
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .fs-footer-bottom {
     flex-direction: column;
     align-items: flex-start;
   }
-  .fs-footer-nav--center{
-    justify-content: flex-start;
-  }
-  .fs-footer-nav--center ul{
-    justify-content: flex-start;
-  }
+  .fs-footer-nav--center { justify-content: flex-start; }
+  .fs-footer-nav--center ul { justify-content: flex-start; }
+  .fs-footer-signature { text-align: left; }
 }
 
-/* ===== Post/Page divider card: make <hr> match our bridge (lines + dot only) =====
-   Ghost's Divider card renders as an <hr> (often with the kg-divider-card class).
-   We style it purely via CSS so authors don't need any extra HTML.
-*/
+
+/* ============================================================
+   15. Contact form
+   ============================================================ */
+.fs-contact-form {
+  margin: 0 0 1.25rem;
+  padding: 1.25rem;
+  border-radius: 18px;
+  background: rgba(0,0,0,.30);
+  box-shadow: 0 10px 28px rgba(0,0,0,.35);
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+.fs-contact-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .9rem;
+}
+
+@media (min-width: 768px) {
+  .fs-contact-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.fs-contact-field {
+  display: block;
+  margin: 0 0 .9rem;
+}
+
+.fs-contact-label {
+  display: block;
+  font-weight: 900;
+  font-variant-caps: all-small-caps;
+  letter-spacing: .05em;
+  opacity: .9;
+  margin: 0 0 .35rem;
+}
+
+.fs-contact-input,
+.fs-contact-textarea {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 12px;
+  padding: .8rem .9rem;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.35);
+  color: var(--text);
+  outline: none;
+}
+
+.fs-contact-textarea { resize: vertical; }
+
+.fs-contact-input:focus,
+.fs-contact-textarea:focus {
+  border-color: var(--accent);
+}
+
+.fs-contact-honey   { display: none !important; }
+.fs-contact-submit  { margin-top: .25rem; }
+
+.fs-contact-status {
+  margin-top: .75rem;
+  font-weight: 800;
+  opacity: .9;
+}
+
+
+/* ============================================================
+   16. 404 / error pages
+   ============================================================ */
+.fs-404 {
+  position: relative;
+  min-height: calc(100vh - 140px);
+  display: grid;
+  place-items: center;
+  padding: 4rem 1.5rem;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  background: rgba(255,255,255,.03);
+}
+
+.fs-404.has-cover {
+  background-image: var(--fs404-cover);
+  background-size: cover;
+  background-position: center;
+}
+
+.fs-404__overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at top, rgba(0,0,0,.35), rgba(0,0,0,.75));
+  z-index: 0;
+}
+
+.fs-404__content {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  width: 100%;
+  padding: 2rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.fs-404__code {
+  font-size: clamp(3rem, 7vw, 5rem);
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: .08em;
+  color: var(--pop);
+  margin-bottom: .75rem;
+}
+
+.fs-404__title    { margin: 0 0 .75rem 0; }
+.fs-404__subtitle { margin: 0 auto 1.5rem auto; max-width: 54ch; opacity: .9; }
+.fs-404__actions  { display: flex; justify-content: center; }
+
+.fs-404__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: .7rem 1.1rem;
+  border-radius: .9rem;
+  background: var(--pop);
+  border: 1px solid var(--pop);
+  color: #0b0f12;
+  text-decoration: none;
+  font-weight: 700;
+}
+.fs-404__btn:hover { filter: brightness(1.05); }
+
+.fs-error { /* fs-card provides the visual */ }
+.fs-error__title    { margin: 0 0 .5rem; }
+.fs-error__subtitle { margin: 0; color: var(--subtext); }
+
+
+/* ============================================================
+   17. Ghost content (gh-content, kg-*, code blocks)
+   ============================================================ */
+
+/* Divider card: styled as line + dot to match our bridge pattern */
 .gh-content hr,
-.gh-content hr.kg-divider-card{
+.gh-content hr.kg-divider-card {
   border: 0;
   height: 24px;
   margin: 2.25rem auto;
@@ -3512,7 +1825,7 @@ body.home-template .fs-postrow:hover .thumb{
 }
 
 .gh-content hr::before,
-.gh-content hr.kg-divider-card::before{
+.gh-content hr.kg-divider-card::before {
   content: "";
   position: absolute;
   left: 50%;
@@ -3530,7 +1843,7 @@ body.home-template .fs-postrow:hover .thumb{
 }
 
 .gh-content hr::after,
-.gh-content hr.kg-divider-card::after{
+.gh-content hr.kg-divider-card::after {
   content: "";
   position: absolute;
   left: 50%;
@@ -3543,80 +1856,11 @@ body.home-template .fs-postrow:hover .thumb{
   opacity: .9;
 }
 
-
-/* =========================================================
-   0.37.1 Update - Header nav states + proper code blocks
-   ========================================================= */
-
-/* Desktop top navigation: slightly larger with accent hover/active states */
-.fs-nav .nav{
-  gap: 1.15rem;
-}
-
-.fs-nav .nav a,
-.fs-nav .nav a:visited{
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.5rem;
-  font-size: 1.06rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--text);
-  transition: color .18s ease, opacity .18s ease;
-}
-
-.fs-nav .nav a::after{
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -0.35rem;
-  height: 2px;
-  border-radius: 999px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform .18s ease, opacity .18s ease;
-  opacity: .9;
-}
-
-.fs-nav .nav a:hover,
-.fs-nav .nav a:focus-visible{
-  color: var(--accent);
-  text-decoration: none;
-}
-
-.fs-nav .nav a:hover::after,
-.fs-nav .nav a:focus-visible::after,
-.fs-nav .nav li.nav-current > a::after,
-.fs-nav .nav a[aria-current="page"]::after{
-  transform: scaleX(1);
-}
-
-.fs-nav .nav li.nav-current > a,
-.fs-nav .nav a[aria-current="page"]{
-  color: var(--accent);
-}
-
-/* Mobile drawer: carry accent state through for consistency */
-.fs-mobile-drawer__nav .nav li.nav-current > a,
-.fs-mobile-drawer__nav .nav a[aria-current="page"]{
-  color: var(--accent) !important;
-  border-color: color-mix(in srgb, var(--accent) 42%, rgba(255,255,255,.08));
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent);
-}
-
-.fs-mobile-drawer__nav .nav a:hover,
-.fs-mobile-drawer__nav .nav a:focus-visible{
-  color: var(--accent) !important;
-}
-
-/* Restore actual code blocks instead of inline-highlight look */
+/* Code blocks */
 .gh-content pre,
 .gh-content .kg-code-card pre,
 .post-template .gh-content pre,
-.page-template .gh-content pre{
+.page-template .gh-content pre {
   display: block;
   width: 100%;
   max-width: 100%;
@@ -3636,7 +1880,7 @@ body.home-template .fs-postrow:hover .thumb{
 .gh-content pre code,
 .gh-content .kg-code-card pre code,
 .post-template .gh-content pre code,
-.page-template .gh-content pre code{
+.page-template .gh-content pre code {
   display: block;
   padding: 0;
   margin: 0;
@@ -3651,8 +1895,7 @@ body.home-template .fs-postrow:hover .thumb{
   word-break: normal;
 }
 
-/* Keep inline code looking like inline code, not full blocks */
-.gh-content :not(pre) > code{
+.gh-content :not(pre) > code {
   display: inline;
   padding: .16rem .42rem;
   border-radius: .45rem;
@@ -3663,14 +1906,72 @@ body.home-template .fs-postrow:hover .thumb{
   white-space: normal;
 }
 
-
-/* 1.0.12 Update - contain code block overflow inside content area */
 .gh-content .kg-code-card,
 .gh-content .kg-code-card pre,
-.gh-content pre{
+.gh-content pre {
   max-width: 100%;
 }
 
-.gh-content > *{
-  min-width: 0;
+
+/* ============================================================
+   18. Nav states (active/current + hover underline)
+   ============================================================ */
+.fs-nav .nav { gap: 1.15rem; }
+
+.fs-nav .nav a,
+.fs-nav .nav a:visited {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  font-size: 1.06rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  transition: color .18s ease, opacity .18s ease;
+}
+
+.fs-nav .nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.35rem;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform .18s ease, opacity .18s ease;
+  opacity: .9;
+}
+
+.fs-nav .nav a:hover,
+.fs-nav .nav a:focus-visible {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.fs-nav .nav a:hover::after,
+.fs-nav .nav a:focus-visible::after,
+.fs-nav .nav li.nav-current > a::after,
+.fs-nav .nav a[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+.fs-nav .nav li.nav-current > a,
+.fs-nav .nav a[aria-current="page"] {
+  color: var(--accent);
+}
+
+.fs-mobile-drawer__nav .nav li.nav-current > a,
+.fs-mobile-drawer__nav .nav a[aria-current="page"] {
+  color: var(--accent) !important;
+  border-color: color-mix(in srgb, var(--accent) 42%, rgba(255,255,255,.08));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.fs-mobile-drawer__nav .nav a:hover,
+.fs-mobile-drawer__nav .nav a:focus-visible {
+  color: var(--accent) !important;
 }
