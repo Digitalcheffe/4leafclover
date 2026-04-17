@@ -522,6 +522,7 @@ body.home-template .fs-main {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
+  align-items: start;
 }
 
 body:not(.home-template) .fs-grid {
@@ -793,7 +794,7 @@ body.home-template .fs-featured-rail-shell {
   scroll-snap-align: start;
   min-width: 0;
   flex: 0 0 calc(
-    (100% - (var(--fs-rail-gap) * (var(--fs-rail-cols) - 1))) / var(--fs-rail-cols) + 2px
+    (100% - (var(--fs-rail-gap) * (var(--fs-rail-cols) - 1))) / var(--fs-rail-cols)
   );
 }
 
@@ -1065,6 +1066,7 @@ body.home-template .fs-featured-rail-shell {
 /* tag page: force single-column feed */
 .tag-template .fs-feed-horizontal {
   width: 100%;
+  margin-top: 1.25rem;
 }
 .fs-tag-template .fs-postrow,
 .tag-template .fs-postrow {
@@ -1072,6 +1074,27 @@ body.home-template .fs-featured-rail-shell {
   margin-right: 0;
 }
 
+.fs-pagination {
+  margin-top: 2.5rem;
+}
+
+/* tag cloud */
+.fs-tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+.fs-tag-cloud .fs-muted {
+  font-weight: 900;
+}
+
+
+/* sidebar sticky state (toggled via @custom.sidebar_sticky) */
+aside.is-sticky {
+  position: sticky;
+  top: 5.5rem;
+  align-self: start;
+}
 
 /* ============================================================
    10. Sidebar
@@ -1301,6 +1324,22 @@ body.home-template .fs-featured-rail-shell {
    ============================================================ */
 .fs-post-header { /* structural wrapper — no decoration */ }
 
+.fs-post-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 950;
+  letter-spacing: -0.03em;
+}
+
+.fs-post-meta-line {
+  margin-top: .5rem;
+  font-weight: 800;
+}
+
+.fs-content-wrap .gh-content {
+  margin-top: 1.5rem;
+}
+
 .fs-breadcrumbs {
   display: flex;
   flex-wrap: wrap;
@@ -1523,6 +1562,11 @@ body.home-template .fs-featured-rail-shell {
   padding: 0 1.25rem 1.25rem 1.25rem;
 }
 .fs-author-socials:empty { display: none; }
+
+/* author page: card sits closer to top than post sidebar author card */
+.fs-author-card--profile {
+  margin-top: 1.25rem;
+}
 
 /* author page: larger photo */
 .fs-author-card--profile .fs-author-card__photo {
