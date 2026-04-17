@@ -97,6 +97,13 @@
     function norm(s){return String(s||'').toLowerCase().trim();}
     function iconFor(name){return ICONS[norm(name)] || ICONS[norm(name).replace(/\s+/g,'')] || null;}
 
+    function safeUrl(url) {
+      try {
+        var u = new URL(url, window.location.href);
+        return /^https?:|^mailto:/.test(u.protocol) ? u.href : null;
+      } catch(e) { return null; }
+    }
+
     function makeLink(name, url){
       var a = document.createElement('a');
       a.className = 'social-icon';
@@ -106,7 +113,9 @@
       if (key === 'email' && url.indexOf('mailto:') !== 0) {
         url = 'mailto:' + url;
       }
-      a.href = url;
+      var safe = safeUrl(url);
+      if (!safe) return null;
+      a.href = safe;
 
       var svg = iconFor(name);
       a.innerHTML = svg ? svg : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.6 13.4a1 1 0 0 1 0-1.4l3.5-3.5a3 3 0 0 1 4.2 4.2l-1.6 1.6a1 1 0 1 1-1.4-1.4l1.6-1.6a1 1 0 0 0-1.4-1.4l-3.5 3.5a1 1 0 0 1-1.4 0zM13.4 10.6a1 1 0 0 1 0 1.4l-3.5 3.5a3 3 0 0 1-4.2-4.2l1.6-1.6A1 1 0 1 1 8.7 11L7.1 12.6a1 1 0 0 0 1.4 1.4l3.5-3.5a1 1 0 0 1 1.4 0z"/></svg>';
@@ -130,7 +139,8 @@
         var name = p.slice(0,idx).trim();
         var url = p.slice(idx+1).trim();
         if(!name || !url) return;
-        container.appendChild(makeLink(name, url));
+        var link = makeLink(name, url);
+        if(link) container.appendChild(link);
       });
     });
   } catch(e){}
