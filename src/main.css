@@ -1095,6 +1095,37 @@ body.home-template .fs-featured-rail-shell {
   margin-top: 2.5rem;
 }
 
+.fs-pagination .pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.fs-pagination .pagination .page-number {
+  font-size: .85rem;
+  color: var(--subtext);
+  font-weight: 600;
+}
+
+.fs-pagination .pagination a {
+  display: inline-flex;
+  align-items: center;
+  padding: .5rem 1rem;
+  border-radius: .5rem;
+  border: 1px solid var(--pu-card-border);
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: .9rem;
+  transition: border-color .15s;
+}
+
+.fs-pagination .pagination a:hover {
+  border-color: var(--pu-card-border-hover);
+}
+
 /* tag cloud */
 .fs-tag-cloud {
   display: flex;
