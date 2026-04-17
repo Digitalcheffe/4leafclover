@@ -1,6 +1,6 @@
-module.exports = {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {}
-  }
-};
+module.exports = (ctx) => ({
+  plugins: [
+    require('autoprefixer'),
+    ctx.env === 'production' ? require('cssnano')({ preset: 'default' }) : false
+  ].filter(Boolean)
+});

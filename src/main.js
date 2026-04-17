@@ -137,6 +137,18 @@
 })();
 
 
+// ---- Pagination: append #fs-feed so page reloads land at the feed ----
+(function () {
+  document.querySelectorAll('.fs-pagination a').forEach(function (a) {
+    try {
+      var url = new URL(a.href);
+      url.hash = 'fs-feed';
+      a.href = url.toString();
+    } catch (e) {}
+  });
+})();
+
+
 // ---- Search overlay ----
 (function () {
   var overlay = document.getElementById('fs-search-overlay');
