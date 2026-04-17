@@ -1529,6 +1529,7 @@ aside.is-sticky {
   border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
   overflow: hidden;
   position: relative;
+  background: #121823;
 }
 
 .fs-author-card__cover {
@@ -1585,18 +1586,22 @@ aside.is-sticky {
   text-transform: uppercase;
   color: var(--accent);
   margin-bottom: .25rem;
-  opacity: .85;
+  font-weight: 800;
+  opacity: 1;
 }
 
 .fs-author-card__name {
   margin: 0;
   font-size: 1rem;
   letter-spacing: -0.01em;
+  font-weight: 900;
+  color: #fff;
 }
 
 .fs-author-card__bio {
   margin: .25rem 0 0 0;
-  color: var(--subtext);
+  color: #fff;
+  font-weight: 600;
   font-size: .9rem;
   line-height: 1.5;
 }
