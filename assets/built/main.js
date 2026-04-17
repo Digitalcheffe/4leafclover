@@ -135,3 +135,60 @@
     });
   } catch(e){}
 })();
+
+
+// ---- Contact form ----
+(function () {
+  var form = document.querySelector('.fs-contact-form');
+  if (!form) return;
+
+  // Time trap: stamp load time so elapsed can be calculated on submit
+  var tsField = form.querySelector('[name="_ts"]');
+  if (tsField) tsField.value = Date.now();
+
+  var webhook = (form.getAttribute('data-webhook') || '').trim();
+  if (!webhook) return;
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    var statusEl = form.querySelector('.fs-contact-status');
+    var btn      = form.querySelector('.fs-contact-submit');
+    var successMsg = form.getAttribute('data-success') || 'Thanks \u2014 your message has been sent!';
+    var errorMsg   = form.getAttribute('data-error')   || 'Sorry \u2014 something went wrong. Please try again later.';
+
+    if (btn) { btn.disabled = true; btn.setAttribute('aria-busy', 'true'); }
+    if (statusEl) statusEl.textContent = 'Sending\u2026';
+
+    var fd      = new FormData(form);
+    var elapsed = Date.now() - parseInt(fd.get('_ts') || 0);
+
+    var payload = {
+      name:    (fd.get('name')    || '').toString().trim(),
+      email:   (fd.get('email')   || '').toString().trim(),
+      subject: (fd.get('subject') || '').toString().trim(),
+      message: (fd.get('message') || '').toString().trim(),
+      website: (fd.get('website') || '').toString().trim(),
+      _elapsed: elapsed,
+      pageUrl: window.location.href,
+      ts: new Date().toISOString()
+    };
+
+    try {
+      var res = await fetch(webhook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+
+      form.reset();
+      if (statusEl) statusEl.textContent = successMsg;
+    } catch (err) {
+      if (statusEl) statusEl.textContent = errorMsg;
+    } finally {
+      if (btn) { btn.disabled = false; btn.removeAttribute('aria-busy'); }
+    }
+  });
+})();
