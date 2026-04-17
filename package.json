@@ -1,7 +1,8 @@
 {
     "name": "4leafclover",
-    "description": "4leafclover - Bold high-contrast Ghost theme with horizontal feed, sidebar, and deep customization.",
+    "description": "Bold high-contrast Ghost theme with horizontal feed, sidebar, and deep customization.",
     "version": "1.2.0",
+    "keywords": ["ghost-theme"],
     "private": true,
     "engines": {
         "ghost": ">=6.0.0"
@@ -25,86 +26,99 @@
         "url": "https://painfully-useful.com"
     },
     "config": {
+        "posts_per_page": 10,
+        "image_sizes": {},
+        "card_assets": true,
         "custom": {
             "background_color": {
                 "type": "color",
                 "default": "#0B0F14",
+                "group": "colors",
                 "description": "Page background color"
             },
             "surface_color": {
                 "type": "color",
                 "default": "#121823",
-                "description": "Surface/card background color"
+                "group": "colors",
+                "description": "Card and panel background color"
             },
             "sticky_header": {
                 "type": "boolean",
                 "default": false,
-                "description": "Keep the site header fixed to the top while scrolling"
+                "group": "layout",
+                "description": "Pin the header to the top while scrolling"
             },
             "sidebar_sticky": {
                 "type": "boolean",
                 "default": false,
-                "description": "Make the sidebar stick while scrolling (desktop)"
+                "group": "layout",
+                "description": "Stick the sidebar in place on desktop while scrolling"
             },
             "social_links_extra": {
                 "type": "text",
                 "default": "",
-                "description": "Comma-separated list of Platform:URL pairs (e.g. GitHub:https://github.com/x, LinkedIn:https://linkedin.com/in/x)"
+                "group": "sidebar",
+                "description": "Extra social icons. Format: Platform:URL, Platform:URL"
             },
             "cta_text": {
                 "type": "text",
                 "default": "Join free for updates",
-                "description": "Signup CTA text used in the sidebar"
+                "group": "sidebar",
+                "description": "Sidebar signup CTA headline"
             },
             "cta_subtext": {
                 "type": "text",
                 "default": "No spam. Just the good stuff.",
-                "description": "Signup CTA subtext used in the sidebar"
+                "group": "sidebar",
+                "description": "Sidebar signup CTA subtext"
             },
             "contact_webhook_url": {
                 "type": "text",
                 "default": "",
+                "group": "contact",
                 "title": "Contact form webhook URL",
-                "description": "Optional. If set, the contact form will POST to this webhook (e.g., n8n). Leave blank to use the form action endpoint."
+                "description": "POST form submissions to this URL (n8n, Zapier, etc.)"
             },
             "contact_success_message": {
                 "type": "text",
                 "default": "Thanks \u2014 your message has been sent!",
+                "group": "contact",
                 "title": "Contact success message",
-                "description": "Message shown after successful submission."
+                "description": "Message shown after successful submission"
             },
             "contact_error_message": {
                 "type": "text",
                 "default": "Sorry \u2014 something went wrong. Please try again later.",
+                "group": "contact",
                 "title": "Contact error message",
-                "description": "Message shown if the webhook returns an error."
+                "description": "Message shown if the submission fails"
             },
             "home_hero_logo": {
                 "type": "image",
                 "default": "",
                 "group": "homepage",
                 "title": "Home hero overlay logo",
-                "description": "Centered logo overlay on the home page publication cover image."
+                "description": "Logo overlaid on the homepage hero image"
             },
             "show_home_intro": {
                 "type": "boolean",
                 "default": true,
                 "group": "homepage",
-                "description": "Show the homepage intro content (from the page slug above)"
+                "description": "Show the homepage intro content"
             },
             "page_bridge_text": {
                 "type": "text",
                 "default": "Field:Notes",
                 "group": "homepage",
                 "title": "Page bridge text",
-                "description": "Text shown in the bridge between the hero and the page feed. Format: Left:Right (example: Field:Notes)."
+                "description": "Bridge text between hero and feed. Format: Left:Right"
             },
             "footer_bridge_text": {
                 "type": "text",
                 "default": "Stay Curious:Stay Useful",
                 "group": "footer",
                 "title": "Footer bridge text",
-                "description": "Text shown in the bridge above the footer. Format: Left:Right (example: Stay Curious:Stay Useful)."
+                "description": "Bridge text above the footer. Format: Left:Right"
             }
         }
     }

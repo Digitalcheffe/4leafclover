@@ -1,6 +1,6 @@
 # 4leafclover
 
-A bold, high-contrast Ghost theme with a horizontal post feed, sticky-capable sidebar, featured rail, and deep admin-side customization. Built for Ghost 6.0+ and styled with Tailwind CSS.
+A bold, high-contrast Ghost theme with a horizontal post feed, sticky-capable sidebar, featured rail, and deep admin-side customization. Built for Ghost 6.0+.
 
 > 4leafclover — Bold high-contrast Ghost theme with horizontal feed, sidebar, and deep customization.
 
@@ -21,11 +21,11 @@ Very light support offered — I'll do my best to answer issues as they come in.
 ## Requirements
 
 - Ghost `>= 6.0.0`
-- Node.js (for building Tailwind CSS)
+- Node.js (for building CSS — only needed if you're developing locally)
 
 ## Install
 
-1. Download this repository as a ZIP (GitHub → **Code → Download ZIP**).
+1. Go to the [Releases page](https://github.com/Digitalcheffe/4leafclover/releases) and download the latest `4leafclover-x.x.x.zip`.
 2. In Ghost Admin, go to **Settings → Design → Change theme → Upload theme** and upload the ZIP.
 3. Activate **4leafclover**.
 
@@ -53,7 +53,7 @@ The main accent color uses Ghost's built-in `@site.accent_color` (set under **Se
 
 ### Search
 
-The header search button uses Ghost's native `#/search` hash route, which triggers the Sodo Search overlay Ghost injects automatically on Ghost 6 sites. No extra setup needed — search is available to all visitors regardless of whether Members is enabled.
+The header search button opens a built-in custom search overlay powered by Ghost's Content API. No setup required — the theme reads the API key automatically via `{{content_api_key}}` at render time. Search is available to all visitors regardless of whether Members is enabled.
 
 ### Homepage
 
@@ -179,8 +179,7 @@ The homepage rail shows up to 4 posts flagged as **Featured** in Ghost Admin. Th
 ## Built with
 
 - [Ghost](https://ghost.org/) 6+
-- [Tailwind CSS](https://tailwindcss.com/) 3.4
-- [PostCSS](https://postcss.org/) + Autoprefixer
+- [PostCSS](https://postcss.org/) + Autoprefixer + cssnano
 - [gscan](https://github.com/TryGhost/gscan) for theme validation
 
 ## Reference
