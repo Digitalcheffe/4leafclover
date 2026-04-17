@@ -6,17 +6,7 @@
 <div class="fs-grid">
     <article class="fs-content-card">
       <div class="fs-content-wrap">
-        <header class="fs-post-header">
-          <nav class="fs-breadcrumbs" aria-label="Breadcrumb">
-            <a class="fs-crumb" href="{{@site.url}}">Home</a>
-            <span class="fs-crumb-sep">/</span>
-            <span class="fs-crumb-current">{{title}}</span>
-          </nav>
-
-          <div class="fs-muted fs-post-meta-line">{{date format="MMM D, YYYY"}}{{#if tags}} • {{tags separator=" • "}}{{/if}}</div>
-
-          <h1 class="fs-post-title">{{title}}</h1>
-        </header>
+        {{> "content-header"}}
 
 
       {{#if feature_image}}
@@ -78,9 +68,7 @@
 
 </article>
 
-    <aside class="fs-sidebar{{#if @custom.sidebar_sticky}} is-sticky{{/if}}">
-      {{> "sidebar"}}
-    </aside>
+    {{> "sidebar"}}
   </div>
 </main>
 

@@ -1,0 +1,28 @@
+{{!-- Shared post/page/tag header: breadcrumbs, meta, conditional h1 --}}
+<header class="fs-post-header">
+  <nav class="fs-breadcrumbs" aria-label="Breadcrumb">
+    <a class="fs-crumb" href="{{@site.url}}">Home</a>
+    <span class="fs-crumb-sep">/</span>
+    {{#is "tag"}}
+      <span class="fs-crumb-current">Tag: {{tag.name}}</span>
+    {{else}}
+      <span class="fs-crumb-current">{{title}}</span>
+    {{/is}}
+  </nav>
+
+  {{#is "post"}}
+    <div class="fs-muted fs-post-meta-line">{{date format="MMM D, YYYY"}}{{#if tags}} • {{tags separator=" • "}}{{/if}}</div>
+    <h1 class="fs-post-title">{{title}}</h1>
+  {{/is}}
+
+  {{#is "page"}}
+    <div class="fs-muted fs-post-meta-line">{{date format="MMM D, YYYY"}}{{#if primary_tag}} • <a href="{{primary_tag.url}}">{{primary_tag.name}}</a>{{/if}}</div>
+    {{#if @page.show_title_and_feature_image}}
+      <h1 class="fs-post-title">{{title}}</h1>
+    {{/if}}
+  {{/is}}
+
+  {{#is "tag"}}
+    <h1 class="fs-post-title">Tag: {{tag.name}}</h1>
+  {{/is}}
+</header>
