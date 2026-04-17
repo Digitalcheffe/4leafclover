@@ -1341,6 +1341,13 @@ body.home-template .fs-featured-rail-shell {
 }
 .gh-content p:last-child { margin-bottom: 0; }
 
+.gh-content h1 { font-size: 2rem;   font-weight: 950; }
+.gh-content h2 { font-size: 1.5rem; font-weight: 900; }
+.gh-content h3 { font-size: 1.2rem; font-weight: 900; }
+.gh-content h4 { font-size: 1rem;   font-weight: 800; }
+.gh-content h5 { font-size: .9rem;  font-weight: 800; }
+.gh-content h6 { font-size: .85rem; font-weight: 800; }
+
 .gh-content h1, .gh-content h2, .gh-content h3,
 .gh-content h4, .gh-content h5, .gh-content h6 {
   margin: 2rem 0 .75rem;
