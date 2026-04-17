@@ -16,7 +16,7 @@ const outFile = path.join(distDir, `4leafclover-${version}.zip`);
 
 // Build CSS
 console.log('Building CSS...');
-execSync('npx tailwindcss -i ./src/main.css -o ./assets/built/main.css --minify', {
+execSync('npx postcss src/main.css -o assets/built/main.css --env production', {
   cwd: root,
   stdio: 'inherit'
 });

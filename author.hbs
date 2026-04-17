@@ -15,37 +15,7 @@
             </nav>
           </header>
 
-          {{!-- Author card (matches post.hbs author card; larger avatar on author page) --}}
-<section class="fs-author-card fs-author-card--profile" aria-label="About the author">
-  <div class="fs-author-card__inner" aria-label="About author {{name}}">
-
-    {{!-- Whole card link (social icons sit above this layer and remain clickable) --}}
-    <a class="fs-author-card__overlay-link" href="{{url}}" aria-label="View author {{name}}"></a>
-
-    {{#if profile_image}}
-      <div class="fs-author-card__photo fs-author-card__pe-none">
-        <img src="{{img_url profile_image size="m"}}" alt="{{name}}">
-      </div>
-    {{/if}}
-
-    <div class="fs-author-card__body fs-author-card__pe-none">
-      <div class="fs-author-card__eyebrow">Author</div>
-      <h3 class="fs-author-card__name">{{name}}</h3>
-      {{#if bio}}
-        <p class="fs-author-card__bio">{{bio}}</p>
-      {{/if}}
-    </div>
-
-    {{!-- Social icons (only shows populated profiles) --}}
-    <div class="fs-author-card__socials">
-      {{> "author-socials"}}
-    </div>
-
-    {{#if cover_image}}
-      <div class="fs-author-card__cover" aria-hidden="true" style="background-image:url('{{img_url cover_image size="m"}}')"></div>
-    {{/if}}
-  </div>
-</section>
+          {{> "author-card"}}
 {{/author}}
 
 {{!-- Bridge: Latest • Field Notes --}}
@@ -69,9 +39,7 @@
       </div>
     </article>
 
-    <aside class="fs-sidebar{{#if @custom.sidebar_sticky}} is-sticky{{/if}}">
-      {{> "sidebar"}}
-    </aside>
+    {{> "sidebar"}}
 
   </div>
 </main>

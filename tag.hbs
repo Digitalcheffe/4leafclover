@@ -5,29 +5,19 @@
 
     <article class="fs-content-card">
       <div class="fs-content-wrap">
-        <header class="fs-post-header">
-          <nav class="fs-breadcrumbs" aria-label="Breadcrumb">
-            <a class="fs-crumb" href="{{@site.url}}">Home</a>
-            <span class="fs-crumb-sep">/</span>
-            <span class="fs-crumb-current">Tag: {{tag.name}}</span>
-          </nav>
-
-          <h1 class="fs-post-title">Tag: {{tag.name}}</h1>
-          <div class="fs-feed-horizontal">
+        {{> "content-header"}}
+        <div id="fs-feed" class="fs-feed-horizontal">
           {{#foreach posts}}
             {{> "post-row"}}
           {{/foreach}}
         </div>
-
         <div class="fs-pagination">
           {{pagination}}
         </div>
       </div>
     </article>
 
-    <aside class="fs-sidebar{{#if @custom.sidebar_sticky}} is-sticky{{/if}}">
-      {{> "sidebar"}}
-    </aside>
+    {{> "sidebar"}}
 
   </div>
 </main>
