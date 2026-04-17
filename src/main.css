@@ -751,7 +751,7 @@ body.home-template .fs-featured-rail-shell {
 .fs-featured-rail {
   margin: 0 auto;
   max-width: var(--fs-shell-max, 1200px);
-  padding: .5rem 0 0;
+  padding: .5rem 0 1.5rem;
 }
 
 @media (max-width: 768px) {
