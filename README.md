@@ -130,6 +130,44 @@ return [{ json: { ...b, _status: (trap || elapsed < 3000) ? 'bot' : 'good' } }];
 
 > Tune the `3000` threshold (ms) up or down to taste. 5000ms is more conservative if you want extra headroom.
 
+### Posting to Matrix
+
+After the IF node's true branch, add a **Code** node to build the Matrix message payload:
+
+```javascript
+const b = $input.first().json;
+
+const plain = `📬 New contact from ${b.name}\nSubject: ${b.subject}\nEmail: ${b.email}\n\n${b.message}`;
+
+const html = `
+<h3>📬 New Contact Form Submission</h3>
+<p>
+  <strong>From:</strong> ${b.name} — <a href="mailto:${b.email}">${b.email}</a><br>
+  <strong>Subject:</strong> ${b.subject}
+</p>
+<blockquote>${b.message.replace(/\n/g, '<br>')}</blockquote>
+<p><em>${b.pageUrl}</em></p>
+`.trim();
+
+return [{
+  json: {
+    msgtype: "m.text",
+    body: plain,
+    format: "org.matrix.custom.html",
+    formatted_body: html
+  }
+}];
+```
+
+Then add an **HTTP Request** node:
+
+- **Method:** `PUT`
+- **URL:** `https://YOUR_MATRIX_SERVER/_matrix/client/v3/rooms/YOUR_ROOM_ID/send/m.room.message/{{$now}}`
+- **Header:** `Authorization: Bearer YOUR_ACCESS_TOKEN`
+- **Body:** JSON → pass `{{ $json }}` from the Code node
+
+The `{{$now}}` timestamp in the URL serves as the transaction ID and prevents duplicate messages if n8n retries.
+
 ## Featured posts
 
 The homepage rail shows up to 4 posts flagged as **Featured** in Ghost Admin. The main feed below the rail shows all non-featured posts.
