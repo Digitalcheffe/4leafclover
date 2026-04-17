@@ -743,7 +743,7 @@ body.home-template .fs-home-hero__logo img {
 body.home-template .fs-featured-rail-shell {
   transform: none !important;
   margin-top: 1rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0;
   position: relative;
   z-index: 1;
 }
@@ -751,7 +751,7 @@ body.home-template .fs-featured-rail-shell {
 .fs-featured-rail {
   margin: 0 auto;
   max-width: var(--fs-shell-max, 1200px);
-  padding: 1rem 0;
+  padding: .5rem 0 1.5rem;
 }
 
 @media (max-width: 768px) {
@@ -1546,8 +1546,8 @@ body.home-template .fs-featured-rail-shell {
 }
 
 .fs-section-bridge--between {
-  margin: 2.1rem 0 0;
-  padding-bottom: 1.25rem;
+  margin: 1.25rem 0 0;
+  padding-bottom: .75rem;
 }
 
 .fs-section-bridge--between .fs-section-bridge__inner {
