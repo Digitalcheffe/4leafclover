@@ -20,7 +20,6 @@
       </div>
 
 <div class="fs-actions">
-        {{#if @site.members_enabled}}
         <a class="fs-btn fs-btn-icon" href="#/search" aria-label="Search">
           <span class="fs-btn-icon__svg" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -30,7 +29,6 @@
           </span>
           <span class="fs-btn-icon__label">Search</span>
         </a>
-        {{/if}}
 
         {{#if @site.members_enabled}}
           {{#if @member}}

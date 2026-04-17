@@ -53,7 +53,7 @@ The main accent color uses Ghost's built-in `@site.accent_color` (set under **Se
 
 ### Search
 
-The header search button (`#/search`) is powered by Ghost's native Sodo Search and only renders when **Members** is enabled in Ghost Admin (Settings → Membership). Ghost injects the search script automatically in that case — no extra setup needed. If Members is disabled, the button is hidden rather than silently broken.
+The header search button uses Ghost's native `#/search` hash route, which triggers the Sodo Search overlay Ghost injects automatically on Ghost 6 sites. No extra setup needed — search is available to all visitors regardless of whether Members is enabled.
 
 ### Homepage
 
