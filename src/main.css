@@ -135,8 +135,8 @@ html.fs-lock body { overflow: hidden; }
 
 /* pill as a tag link gets accent treatment */
 a.fs-pill {
-  border-color: var(--pop);
-  color: var(--pop);
+  border-color: var(--accent);
+  color: var(--accent);
   text-decoration: none;
 }
 a.fs-pill:hover {
