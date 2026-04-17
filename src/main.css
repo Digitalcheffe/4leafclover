@@ -1311,6 +1311,7 @@ body.home-template .fs-featured-rail-shell {
 .fs-post-feature {
   display: block;
   width: 100%;
+  max-height: 200px;
   margin: 1.25rem 0;
   padding: 0 !important;
   overflow: hidden;
@@ -1321,6 +1322,7 @@ body.home-template .fs-featured-rail-shell {
 .fs-post-feature img {
   display: block;
   width: 100%;
+  height: 200px;
   object-fit: cover;
   object-position: center;
   border-radius: calc(1.25rem - 1px);
