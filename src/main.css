@@ -1335,11 +1335,30 @@ body.home-template .fs-featured-rail-shell {
 }
 
 /* gh-content prose */
-.gh-content h1, .gh-content h2, .gh-content h3 { letter-spacing: -0.02em; }
-.gh-content h2 { margin-top: 2.25rem; }
+.gh-content p {
+  margin: 0 0 1.25rem 0;
+  line-height: 1.75;
+}
+.gh-content p:last-child { margin-bottom: 0; }
+
+.gh-content h1, .gh-content h2, .gh-content h3,
+.gh-content h4, .gh-content h5, .gh-content h6 {
+  margin: 2rem 0 .75rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+.gh-content h1:first-child,
+.gh-content h2:first-child { margin-top: 0; }
+
+.gh-content ul, .gh-content ol {
+  margin: 0 0 1.25rem 1.5rem;
+  padding: 0;
+}
+.gh-content li { margin-bottom: .35rem; line-height: 1.7; }
+
 .gh-content blockquote {
   border-left: 4px solid var(--accent);
-  margin-left: 0;
+  margin: 1.5rem 0;
   padding-left: 1rem;
   color: var(--subtext);
 }
