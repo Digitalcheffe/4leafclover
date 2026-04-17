@@ -113,18 +113,6 @@ html.fs-lock body { overflow: hidden; }
   box-sizing: border-box;
 }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0,0,0,0);
-  white-space: nowrap;
-  border: 0;
-}
-
 .fs-card {
   background: var(--surface);
   border: 1px solid var(--muted);
@@ -1088,34 +1076,6 @@ body.home-template .fs-featured-rail-shell {
 
 .fs-pagination {
   margin-top: 2.5rem;
-}
-
-.fs-pagination .pagination {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  font-size: .875rem;
-  font-weight: 800;
-}
-
-.fs-pagination .pagination .page-number {
-  color: var(--subtext);
-}
-
-.fs-pagination .pagination a {
-  display: inline-block;
-  padding: .4rem 1rem;
-  border: 1px solid var(--accent);
-  border-radius: 999px;
-  color: var(--accent);
-  text-decoration: none;
-  transition: background .15s, color .15s;
-}
-
-.fs-pagination .pagination a:hover {
-  background: var(--accent);
-  color: var(--bg);
 }
 
 /* tag cloud */
