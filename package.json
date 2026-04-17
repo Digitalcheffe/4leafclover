@@ -1,7 +1,7 @@
 {
     "name": "4leafclover",
     "description": "Bold high-contrast Ghost theme with horizontal feed, sidebar, and deep customization.",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "keywords": ["ghost-theme"],
     "private": true,
     "engines": {
