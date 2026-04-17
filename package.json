@@ -7,16 +7,17 @@
         "ghost": ">=6.0.0"
     },
     "scripts": {
-        "dev": "tailwindcss -i ./src/main.css -o ./assets/built/main.css --watch",
-        "build": "tailwindcss -i ./src/main.css -o ./assets/built/main.css --minify",
+        "dev": "postcss src/main.css -o assets/built/main.css --watch",
+        "build": "postcss src/main.css -o assets/built/main.css --env production",
         "pack": "node scripts/pack.js",
         "gscan": "gscan ."
     },
     "devDependencies": {
         "gscan": "^4.0.0",
-        "tailwindcss": "^3.4.0",
         "autoprefixer": "^10.4.0",
-        "postcss": "^8.4.0"
+        "postcss": "^8.4.0",
+        "postcss-cli": "^11.0.0",
+        "cssnano": "^7.0.0"
     },
     "author": {
         "name": "Digitalcheffe",

@@ -1,10 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* ============================================================
    4leafclover — main.css
    Table of contents:
+     0.  Minimal reset
      1.  CSS custom properties (tokens)
      2.  Base reset
      3.  Utility helpers
@@ -24,6 +21,14 @@
     17.  Ghost content (gh-content, kg-*, code blocks)
     18.  Nav states
    ============================================================ */
+
+
+/* ============================================================
+   0. Minimal reset
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+img, video, canvas, audio, iframe, embed, object { display: block; vertical-align: middle; }
+img, video { max-width: 100%; height: auto; }
 
 
 /* ============================================================
